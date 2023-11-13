@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;700&family=Playfair+Display:wght@800&display=swap');
+
+#app {
+  font-family: 'Maven Pro';
+  font-size: 1rem;
+  line-height: 2rem;
+  scroll-behavior: smooth;
+  font-weight: 400;
+  color: #000000;
+}
+
+h1,
+h2 {
+  font-family: 'Playfair Display';
+}
+
+h2 {
+    color: #C2AFD9;
+}
+
+.container {
+    width: 70vw;
+    padding: 5%;
+    border-radius: 20px;
+    background-color: #FCF9FF;
+}
+
+.columns {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    width: 33%;
+}
+
+.half-column {
+    width: 50%;
+}
