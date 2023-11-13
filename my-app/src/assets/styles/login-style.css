@@ -1,0 +1,146 @@
+
+.login {
+    background-color: rgba(255, 255, 255, 1);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .login .div {
+    background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(194, 175, 217) 100%);
+    background-color: rgba(255, 255, 255, 1);
+    height: 844px;
+    position: relative;
+    width: 390px;
+  }
+  
+  .login .logo {
+    height: 110px;
+    left: 140px;
+    object-fit: cover;
+    position: absolute;
+    top: 72px;
+    width: 110px;
+  }
+  
+  .login .overlap {
+    background-color: #fbf8ff;
+    border-radius: 20px;
+    box-shadow: var(--secondary-drop-shadow);
+    height: 476px;
+    left: 26px;
+    position: absolute;
+    top: 227px;
+    width: 338px;
+  }
+  
+  .login .login-button {
+    all: unset;
+    box-sizing: border-box;
+    height: 44px;
+    left: 33px;
+    position: absolute;
+    top: 320px;
+    width: 140px;
+  }
+  
+  .login .overlap-group {
+    background-color: var(--lavender);
+    border-radius: 0px 20px 0px 20px;
+    height: 44px;
+    position: relative;
+    width: 138px;
+  }
+  
+  .login .text-wrapper {
+    color: var(--white);
+    font-family: var(--button-font-family);
+    font-size: var(--button-font-size);
+    font-style: var(--button-font-style);
+    font-weight: var(--button-font-weight);
+    left: 47px;
+    letter-spacing: var(--button-letter-spacing);
+    line-height: var(--button-line-height);
+    position: absolute;
+    top: 11px;
+  }
+  
+  .login .rectangle {
+    border: 1px solid;
+    border-color: var(--lavender);
+    border-radius: 0px 20px 0px 20px;
+    height: 40px;
+    left: 33px;
+    position: absolute;
+    top: 171px;
+    width: 268px;
+  }
+  
+  .login .rectangle-2 {
+    border: 1px solid;
+    border-color: var(--lavender);
+    border-radius: 0px 20px 0px 20px;
+    height: 40px;
+    left: 33px;
+    position: absolute;
+    top: 246px;
+    width: 268px;
+  }
+  
+  .login .p {
+    color: var(--black);
+    font-family: var(--heading-01-mobile-font-family);
+    font-size: var(--heading-01-mobile-font-size);
+    font-style: var(--heading-01-mobile-font-style);
+    font-weight: var(--heading-01-mobile-font-weight);
+    left: 33px;
+    letter-spacing: var(--heading-01-mobile-letter-spacing);
+    line-height: var(--heading-01-mobile-line-height);
+    position: absolute;
+    top: 42px;
+    width: 282px;
+  }
+  
+  .login .text-wrapper-2 {
+    color: var(--black);
+    font-family: var(--text-font-family);
+    font-size: var(--text-font-size);
+    font-style: var(--text-font-style);
+    font-weight: var(--text-font-weight);
+    left: 33px;
+    letter-spacing: var(--text-letter-spacing);
+    line-height: var(--text-line-height);
+    position: absolute;
+    top: 149px;
+    white-space: nowrap;
+  }
+  
+  .login .text-wrapper-3 {
+    color: var(--black);
+    font-family: var(--text-font-family);
+    font-size: var(--text-font-size);
+    font-style: var(--text-font-style);
+    font-weight: var(--text-font-weight);
+    left: 33px;
+    letter-spacing: var(--text-letter-spacing);
+    line-height: var(--text-line-height);
+    position: absolute;
+    top: 224px;
+    white-space: nowrap;
+  }
+  
+  .login .text-wrapper-4 {
+    color: var(--lavender);
+    font-family: var(--link-font-family);
+    font-size: var(--link-font-size);
+    font-style: var(--link-font-style);
+    font-weight: var(--link-font-weight);
+    left: 26px;
+    letter-spacing: var(--link-letter-spacing);
+    line-height: var(--link-line-height);
+    position: absolute;
+    text-decoration: underline;
+    top: 414px;
+    width: 184px;
+  }
