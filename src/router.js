@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from './views/Login.vue';
 import Home from './views/Home.vue';
+import Settings from './views/Settings.vue';
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
     name: 'Login-page',
     component: Login,
   },
+  {
+    path: '/settings',
+    name: 'Settings-page',
+    component: Settings,
+  }
 ];
 
 const router = createRouter({

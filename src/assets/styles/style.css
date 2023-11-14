@@ -35,6 +35,28 @@ iframe {
     border-radius: 0 30px;
 }
 
+.primary-btn {
+    background-color: #C2AFD9;
+    color: #ffffff;
+    font-family: 'Playfair Display';
+    border-radius: 0 20px;
+    border: none;
+    padding: 0.8rem 3.4rem;
+    font-size: 1.3rem;
+    margin-right: 2%;
+}
+
+.secondary-btn {
+    background-color: #ffffff;
+    color: #C2AFD9;
+    font-family: 'Playfair Display';
+    border-radius: 0 20px;
+    border: 1px solid #C2AFD9;
+    padding: 0.8rem 3.4rem;
+    font-size: 1.3rem;
+    margin-right: 2%;
+}
+
 .container {
     width: 70vw;
     padding: 5%;
@@ -78,4 +100,38 @@ iframe {
     padding: 0.3rem 2rem;
     width: 13rem;
     margin-right: 2%;
+}
+
+.input-field {
+    border: 1px solid #C2AFD9;
+    border-radius: 0 30px;
+    height: 3rem;
+    width: 70%;
+    margin-bottom: 5%;
+}
+
+.on {
+    background-color: #C2AFD9;
+    color: #ffffff;
+    width: 2rem;
+    border: none;
+    border-radius: 0 20px;
+    font-family: 'Playfair Display';
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+    margin-right: 5%;
+    text-align: center;
+}
+
+.off {
+    background-color: #BABABA;
+    color: #ffffff;
+    width: 2rem;
+    border: none;
+    border-radius: 0 20px;
+    font-family: 'Playfair Display';
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+    margin-right: 5%;
+    text-align: center;
 }
