@@ -13,7 +13,7 @@ const app = createApp(App);
 
 // Use PrimeVue components globally
 // eslint-disable-next-line vue/multi-word-component-names
-app.component('Button', Button);
+app.component('primeBtn', Button);
 
 // Use Vue Router
 app.use(router);
