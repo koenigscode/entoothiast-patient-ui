@@ -1,0 +1,153 @@
+.login {
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.login .div {
+  background: linear-gradient(180deg, rgb(251.58, 248.6, 255) 0%, rgb(194, 175, 217) 100%);
+  background-color: rgba(255, 255, 255, 1);
+  height: 1209px; /*need to change to percentage to adapt to screen size*/
+  position: relative;
+  width: 1512px;
+}
+
+.login .logo {
+  height: 180px;
+  left: 666px;
+  object-fit: cover;
+  position: absolute;
+  top: 59px;
+  width: 180px;
+}
+
+.login .overlap {
+  background-color: #fbf8ff;
+  border-radius: 20px;
+  box-shadow: var(--secondary-drop-shadow);
+  height: 481px;
+  left: 355px;
+  position: absolute;
+  top: 330px;
+  width: 802px;
+}
+
+.login .text-wrapper {
+  color: var(--black);
+  font-family: var(--heading-01-font-family);
+  font-size: var(--heading-01-font-size);
+  font-style: var(--heading-01-font-style);
+  font-weight: var(--heading-01-font-weight);
+  left: 72px;
+  letter-spacing: var(--heading-01-letter-spacing);
+  line-height: var(--heading-01-line-height);
+  position: absolute;
+  top: 61px;
+}
+
+.login .text-wrapper-2 {
+  color: var(--black);
+  font-family: var(--text-font-family);
+  font-size: var(--text-font-size);
+  font-style: var(--text-font-style);
+  font-weight: var(--text-font-weight);
+  left: 72px;
+  letter-spacing: var(--text-letter-spacing);
+  line-height: var(--text-line-height);
+  position: absolute;
+  top: 147px;
+  white-space: nowrap;
+}
+
+.login .text-wrapper-3 {
+  color: var(--black);
+  font-family: var(--text-font-family);
+  font-size: var(--text-font-size);
+  font-style: var(--text-font-style);
+  font-weight: var(--text-font-weight);
+  left: 72px;
+  letter-spacing: var(--text-letter-spacing);
+  line-height: var(--text-line-height);
+  position: absolute;
+  top: 235px;
+  white-space: nowrap;
+}
+
+.login .text-wrapper-4 {
+  color: var(--lavender);
+  font-family: var(--link-font-family);
+  font-size: var(--link-font-size);
+  font-style: var(--link-font-style);
+  font-weight: var(--link-font-weight);
+  left: 72px;
+  letter-spacing: var(--link-letter-spacing);
+  line-height: var(--link-line-height);
+  position: absolute;
+  text-decoration: underline;
+  top: 416px;
+  white-space: nowrap;
+}
+
+.login .rectangle {
+  border: 1px solid;
+  border-color: var(--lavender);
+  border-radius: 0px 20px 0px 20px;
+  height: 48px;
+  left: 72px;
+  position: absolute;
+  top: 172px;
+  width: 373px;
+}
+
+.login .rectangle-2 {
+  border: 1px solid;
+  border-color: var(--lavender);
+  border-radius: 0px 20px 0px 20px;
+  height: 48px;
+  left: 72px;
+  position: absolute;
+  top: 260px;
+  width: 373px;
+}
+
+.login .login-button {
+  all: unset;
+  box-sizing: border-box;
+  height: 44px;
+  left: 72px;
+  position: absolute;
+  top: 335px;
+  width: 140px;
+}
+
+.login .overlap-group {
+  background-color: var(--lavender);
+  border-radius: 0px 20px 0px 20px;
+  height: 44px;
+  position: relative;
+  width: 138px;
+}
+
+.login .text-wrapper-5 {
+  color: var(--white);
+  font-family: var(--button-font-family);
+  font-size: var(--button-font-size);
+  font-style: var(--button-font-style);
+  font-weight: var(--button-font-weight);
+  left: 47px;
+  letter-spacing: var(--button-letter-spacing);
+  line-height: var(--button-line-height);
+  position: absolute;
+  top: 11px;
+}
+
+.login .img {
+  height: 266px;
+  left: 484px;
+  object-fit: cover;
+  position: absolute;
+  top: 129px;
+  width: 266px;
+}
