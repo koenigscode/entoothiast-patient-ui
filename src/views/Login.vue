@@ -3,11 +3,14 @@
     <div class="login-container">
         <h1>Login to book an appointment</h1>
         <p>Email</p>
-          <div class="input-field"></div>
+          <input class="input-field" type="email" placeholder="Enter your email address" v-model="email" required />
         <p>Password</p>
-          <div class="input-field"></div>
+          <input class="input-field" type="password" placeholder="Enter your password" v-model="password" required />
+          <br />
         <button class="primary-btn">Login</button>
-        <p>Create an account here</p>
+        <br />
+        <br />
+        <a href="/signup" class="signup-link">Create an account here</a>
       </div> 
       <div class="image-container">
     <img src="../assets/login-img.png" class="centered-image">

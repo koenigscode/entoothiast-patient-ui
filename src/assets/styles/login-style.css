@@ -33,6 +33,8 @@ p {
   height: 3rem;
   width: 70%;
   margin-bottom: 5%;
+  padding: 0.5%;
+  padding-left: 3%;
 }
 
 .container {
@@ -71,4 +73,8 @@ p {
 .centered-image {
   max-width: 200%;
   max-height: 200%;
+}
+.signup-link {
+  color: #C2AFD9;
+  text-decoration: underline;
 }
