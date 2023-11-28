@@ -2,8 +2,8 @@
   <div class="container">
     <div class="login-container">
         <h1>Login to book an appointment</h1>
-        <p>Email</p>
-          <input class="input-field" type="email" placeholder="Enter your email address" v-model="email" required />
+        <p>Username</p>
+          <input class="input-field" type="username" placeholder="Enter your username" v-model="username" required />
         <p>Password</p>
           <input class="input-field" type="password" placeholder="Enter your password" v-model="password" required />
           <br />
