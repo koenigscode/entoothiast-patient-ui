@@ -3,13 +3,14 @@
       <div class="login-container">
           <h1>Create an account</h1>
           <p>Name</p>
-            <div class="input-field"></div>
+          <input class="input-field" type="name" placeholder="Enter your name" v-model="name" required />
           <p>Email</p>
-            <div class="input-field"></div>
+          <input class="input-field" type="email" placeholder="Enter your email address" v-model="email" required />
           <p>Password</p>
-            <div class="input-field"></div>
+          <input class="input-field" type="password" placeholder="Enter your password" v-model="password" required />
           <p>Re-type password</p>
-            <div class="input-field"></div>
+          <input class="input-field" type="password" placeholder="Re-type your password" v-model="password" required />
+          <br />
           <button class="primary-btn">Submit</button>
         </div> 
         <div class="image-container">
