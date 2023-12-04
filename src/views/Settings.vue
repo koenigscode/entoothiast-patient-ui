@@ -1,5 +1,11 @@
 <template>
+  <body>
+    <img src="../assets/entoothiast.png" class="logo">
     <div class="container">
+      <div class="iconbar">
+        <img src="../assets/settings.png" class="icon">
+        <img src="../assets/logout.png" class="icon">
+      </div>
       <h1>Settings</h1>
       <div class="columns">
         <div class="half-column">
@@ -37,6 +43,7 @@
     <button class="secondary-btn">Back</button>
 
   </div>
+</body>
 </template>
 
 <script>
