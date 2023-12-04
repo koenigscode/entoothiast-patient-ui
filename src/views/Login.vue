@@ -1,23 +1,22 @@
 <template>
-    <div class="login">
-      <div class="div">
-        <img class="logo" alt="Logo" src="../assets/entoothiast.png" />
-        <div class="overlap">
-          <button class="login-button">
-            <div class="overlap-group">
-              <div class="text-wrapper">Login</div>
-            </div>
-          </button>
-          <div class="rectangle" />
-          <div class="rectangle-2" />
-          <p class="p">Login to book an appointment</p>
-          <div class="text-wrapper-2">Email</div>
-          <div class="text-wrapper-3">Password</div>
-          <div class="text-wrapper-4">Create an account here</div>
-        </div>
-      </div>
-    </div>
-  </template>
+  <div class="container">
+    <div class="login-container">
+        <h1>Login to book an appointment</h1>
+        <p>Username</p>
+          <input class="input-field" type="username" placeholder="Enter your username" v-model="username" required />
+        <p>Password</p>
+          <input class="input-field" type="password" placeholder="Enter your password" v-model="password" required />
+          <br />
+        <button class="primary-btn">Login</button>
+        <br />
+        <br />
+        <a href="/signup" class="signup-link">Create an account here</a>
+      </div> 
+      <div class="image-container">
+    <img src="../assets/login-img.png" class="centered-image">
+  </div>
+    </div> 
+</template>
   
   <script>
   export default {
