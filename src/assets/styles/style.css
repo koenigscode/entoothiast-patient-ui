@@ -7,10 +7,15 @@
   scroll-behavior: smooth;
   font-weight: 400;
   color: #000000;
-  background: linear-gradient(180deg, rgb(251.58, 248.6, 255) 0%, rgb(194, 175, 217) 100%);
-  margin: 0;
-  padding: 5% 0;
   min-height: 100vh;
+}
+
+body {
+    background: linear-gradient(180deg, rgb(251.58, 248.6, 255) 0%, rgb(194, 175, 217) 100%);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100vw;
 }
 
 h1,
@@ -31,8 +36,35 @@ iframe {
     box-shadow: var(--secondary-drop-shadow);
 }
 
+.logo {
+    max-width: 17%;
+    margin-top: 5%;
+}
+
 .border-radius {
     border-radius: 0 30px;
+}
+
+.primary-btn {
+    background-color: #C2AFD9;
+    color: #ffffff;
+    font-family: 'Playfair Display';
+    border-radius: 0 20px;
+    border: none;
+    padding: 0.8rem 3.4rem;
+    font-size: 1.3rem;
+    margin-right: 2%;
+}
+
+.secondary-btn {
+    background-color: #ffffff;
+    color: #C2AFD9;
+    font-family: 'Playfair Display';
+    border-radius: 0 20px;
+    border: 1px solid #C2AFD9;
+    padding: 0.8rem 3.4rem;
+    font-size: 1.3rem;
+    margin-right: 2%;
 }
 
 .container {
@@ -40,8 +72,9 @@ iframe {
     padding: 5%;
     border-radius: 20px;
     background-color: #FCF9FF;
-    margin: auto;
+    margin: 5% auto;
     box-shadow: var(--secondary-drop-shadow);
+    text-align: left;
 }
 
 .columns {
@@ -79,3 +112,91 @@ iframe {
     width: 13rem;
     margin-right: 2%;
 }
+
+.input-field {
+    border: 1px solid #C2AFD9;
+    border-radius: 0 30px;
+    height: 3rem;
+    width: 70%;
+    margin-bottom: 5%;
+}
+
+.on {
+    background-color: #C2AFD9;
+    color: #ffffff;
+    width: 2rem;
+    border: none;
+    border-radius: 0 20px;
+    font-family: 'Playfair Display';
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+    margin-right: 5%;
+    text-align: center;
+}
+
+.off {
+    background-color: #BABABA;
+    color: #ffffff;
+    width: 2rem;
+    border: none;
+    border-radius: 0 20px;
+    font-family: 'Playfair Display';
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+    margin-right: 5%;
+    text-align: center;
+}
+
+.iconbar {
+    text-align: right;
+}
+
+.icon {
+    width: 2rem;
+    margin-left: 2rem;
+}
+
+@media only screen and (max-width: 600px) {
+    iframe {
+        width: 100%;
+    }
+
+    .logo {
+        max-width: 50%;
+    }
+
+    .columns {
+        flex-direction: column;
+    }
+
+    .half-column {
+        width: 100%;
+    }
+
+    .primary-btn {
+        font-size: 1rem;
+        padding: 0.8rem 3rem;
+    }
+
+    .secondary-btn {
+        font-size: 1rem;
+        padding: 0.8rem 3rem;
+    }
+
+    .on {
+        margin-bottom: 5%;
+    }
+
+    .off {
+        margin-bottom: 5%;
+    }
+
+    .filter {
+        margin-bottom: 2%;
+    }
+
+    .appointment {
+        width: 90%;
+        margin-bottom: 5%;
+    }
+  }
