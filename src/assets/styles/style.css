@@ -15,6 +15,10 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
+<<<<<<< HEAD
+=======
+    width: 100vw;
+>>>>>>> origin/master
 }
 
 h1,
@@ -156,6 +160,13 @@ iframe {
 }
 
 @media only screen and (max-width: 600px) {
+<<<<<<< HEAD
+=======
+    iframe {
+        width: 100%;
+    }
+
+>>>>>>> origin/master
     .logo {
         max-width: 50%;
     }
@@ -165,7 +176,11 @@ iframe {
     }
 
     .half-column {
+<<<<<<< HEAD
         width: 120%;
+=======
+        width: 100%;
+>>>>>>> origin/master
     }
 
     .primary-btn {
@@ -185,4 +200,16 @@ iframe {
     .off {
         margin-bottom: 5%;
     }
+<<<<<<< HEAD
+=======
+
+    .filter {
+        margin-bottom: 2%;
+    }
+
+    .appointment {
+        width: 90%;
+        margin-bottom: 5%;
+    }
+>>>>>>> origin/master
   }

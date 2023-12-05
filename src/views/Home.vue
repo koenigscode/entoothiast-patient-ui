@@ -1,5 +1,11 @@
 <template>
-      <div class="container">
+  <body>
+    <img src="../assets/entoothiast.png" class="logo">
+    <div class="container">
+      <div class="iconbar">
+        <img src="../assets/settings.png" class="icon">
+        <img src="../assets/logout.png" class="icon">
+      </div>
         <h1>Welcome, user</h1>
         <div class="columns">
             <div class="half-column">
@@ -94,6 +100,7 @@
             </div>
         </div>
     </div>
+    </body>
   </template>
   
   <script>
