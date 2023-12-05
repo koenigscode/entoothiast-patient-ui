@@ -75,12 +75,14 @@ iframe {
     margin: 5% auto;
     box-shadow: var(--secondary-drop-shadow);
     text-align: left;
+    display: flex;
+    flex-direction: column;
 }
 
 .columns {
     display: flex;
     flex-direction: row;
-    margin: 5% auto;
+    margin-bottom: 5%;
 }
 
 .column {
