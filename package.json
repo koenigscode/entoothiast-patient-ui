@@ -19,7 +19,7 @@
     "primeicons": "^6.0.1",
     "primevue": "^3.40.1",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.13"
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
