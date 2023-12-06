@@ -19,6 +19,8 @@ const routes = [
     path: '/settings',
     name: 'Settings-page',
     component: Settings,
+  },
+  {
     path: '/signup',
     name: 'SignUp-page',
     component: SignUp,
