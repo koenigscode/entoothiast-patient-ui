@@ -95,8 +95,19 @@
                 </ul>
             </div>
             <div class="half-column">
-                <h2>Find your way</h2>
-                <iframe class="border-radius" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37624.51290945841!2d11.951633712337204!3d57.70577925453717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464f8e67966c073f%3A0x4019078290e7c40!2zR8O2dGVib3Jn!5e0!3m2!1sfi!2sse!4v1699993100652!5m2!1sfi!2sse" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+             <div class="map-container" style="height:300px; width:500px">
+                <l-map ref="map" v-model:zoom="zoom" :center="[57.706413, 11.966846]">
+                    <l-tile-layer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    layer-type="base"
+                    name="OpenStreetMap"
+                > </l-tile-layer>
+                <l-control-scale position="topright" :imperial="true" :metric="true" ></l-control-scale>
+               <l-marker v-for="clinic in clinics" :key="clinic.id" :lat-lng="[clinic.lat, clinic.lng]">
+                <l-tooltip> {{ clinic.name }}</l-tooltip>
+               </l-marker>
+                </l-map>  
+            </div>    
             </div>
         </div>
     </div>
@@ -104,9 +115,47 @@
   </template>
   
   <script>
+  import "leaflet/dist/leaflet.css";
+  import { LMap, LTileLayer, LMarker, LTooltip, LControlScale } from "@vue-leaflet/vue-leaflet";
+
   export default {
     name: "Home-page",
-  };
+    components: {
+        LMap,
+        LTileLayer,
+        LMarker,
+        LTooltip,
+        LControlScale
+    },
+    data() {
+        return {
+        zoom: 11.5,
+        clinics: [
+            {
+                "name": "HealthCare Clinic",
+                "id": "1",
+                "location" : "57.700643, 11.947941",
+                "lat": "57.700643",
+                "lng": "11.947941"
+            },
+            {
+                "name": "Wellness Center",
+                "id": "2",
+                "location": "57.702514, 11.980594",
+                "lat": "57.702514",
+                "lng": " 11.980594"
+            },
+            {
+                "name": "DentStar",
+                "id": "3",
+                "location": "57.703245, 11.970594",
+                "lat": "57.703245",
+                "lng": " 11.970594"
+            }
+        ]
+        }
+  }
+}
   </script>
   
   <style>
