@@ -8,6 +8,7 @@
   font-weight: 400;
   color: #000000;
   min-height: 100vh;
+  padding: 0;
 }
 
 body {
@@ -82,7 +83,8 @@ iframe {
 .columns {
     display: flex;
     flex-direction: row;
-    margin-bottom: 5%;
+    margin: 5% auto;
+    width: 100%;
 }
 
 .column {
