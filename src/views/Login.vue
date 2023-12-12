@@ -41,10 +41,19 @@ data() {
         username: this.username,
         password: this.password
       };
+
+      //Api.defaults.headers.common['Content-Type'] = 'application/json';
+      //console.log('Request Headers:', Api.defaults.headers);
+
       Api.post('/v1/users/login', userData)
         .then(response => {
           console.log(response);
+
+        const token = response.data.token;
+        localStorage.setItem('authToken', token);
+
           this.successMessage = "Login successful";
+           this.$router.push({ name: 'Home-page' }); 
         })
         .catch(error => {
           console.error(error);
