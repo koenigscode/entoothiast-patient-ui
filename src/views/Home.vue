@@ -3,45 +3,64 @@
       <img src="../assets/entoothiast.png" class="logo">
       <div class="container">
         <div class="iconbar">
-          <img src="../assets/notification.png" class="icon">
+            <div v-if="showNotifications" class="notification-modal">
+                <h2 style="color: black;">Notifications</h2>
+                <ul><li v-for="notification in notifications" :key="notification.id">
+                        <p><b>{{ notification.timeslot_id }}</b></p><br>
+                        <p>{{ notification.message }}</p>
+                  </li></ul>
+                <button @click="closeNotifications" class="close">Close notifications</button>
+            </div>
+
+          <img src="../assets/notification.png" class="icon" @click="openNotifications">
           <router-link to="/settings"><img src="../assets/settings.png" class="icon"></router-link>
           <img src="../assets/logout.png" class="icon">
         </div>
-          <h1>Welcome, {{ users.name }}</h1>
+          <h1>Welcome, {{ this.username }}</h1>
           <div class="columns">
               <div class="half-column">
                   <h2>Your next appointment</h2>
-                  <div class="appointment">
-                      <p><b>Feb 2, 2024 12:00</b><br>Dentist Name, Dentist Clinic</p>
-                      <p><img src="../assets/cancel.png" class="book">  Cancel appointment</p>
-                  </div>
+                  <ul><li v-for="appointment in upcomingAppointments" :key="appointment.id">
+                    <div class="appointment">
+                          <p><b>{{ appointment.timeslot_id }}</b><br>{{ appointment.dentist_id }}</p>
+                          <p><img src="../assets/cancel.png" class="book" @click="cancelAppointment(appointment.timeslot_id)"> Cancel appointment</p>
+                      </div>
+                  </li></ul>
               </div>
               <div class="half-column">
-                  <h2>Your past appointments</h2>
-                  <p><b>Feb 2, 2024 12:00</b><br>Dentist Name, Dentist Clinic</p>
-                  <p><b>Feb 2, 2024 12:00</b><br>Dentist Name, Dentist Clinic</p>
+                <h2>Your past appointments</h2>
+                <ul><li v-for="appointment in pastAppointments" :key="appointment.id">
+                <div class="appointment">
+                    <p><b>{{ appointment.timeslot_id }}</b><br> {{ appointment.dentist_id }}</p>
+                </div></li></ul>
               </div>
           </div>
   
           <h2>Book appointment</h2>
-          <div class="columns">
-              <div class="filter">
-                  <b>Date</b>
+          <div class="columns" id="lessMargin">
+              <div>
+                <input type="date" v-model="selectedDate" @change="filterByDate" id="dateFilter" class="filter">
               </div>
-              <div class="filter">
-                  <b>Dentist Clinic</b>
+              <div>
+                <select v-model="selectedClinic" @change="filterByClinic" id="clinicFilter" class="filter">
+                    <option value="">All Clinics</option>
+                    <option v-for="clinic in clinics" :key="clinic.id" :value="clinic.id">{{ clinic.name }}</option>
+                </select>
               </div>
-              <div class="filter">
-                  <b>Dentist Name</b>
+              <div>
+                <select v-model="selectedDentist" @change="filterByDentist" id="dentistFilter" class="filter">
+                    <option value="">All Dentists</option>
+                    <option v-for="dentist in dentists" :key="dentist.id" :value="dentist.id">{{ dentist.name }}</option>
+                </select>
               </div>
           </div>
   
           <div class="columns">
-              <ul v-if="message !== 'No available timeslots.'">
+              <ul>
                   <li v-for="timeslot in timeslots" :key="timeslot.id">
                       <div class="appointment">
                           <p><b>{{ timeslot.start_time }} {{ timeslot.end_time }}</b><br>{{ timeslot.dentist_id }}</p>
-                          <p><img src="../assets/book.png" class="book" @click="bookTimeslot"> Book appointment</p>
+                          <p><img src="../assets/book.png" class="book" @click="bookAppointment(timeslot.id)"> Book appointment</p>
                       </div>
                   </li>
               </ul>
@@ -70,36 +89,196 @@
       name: "Home-page",
       data() {
       return {
-        name: '',
+        usernname: '',
         userId: '',
         timeslots: [],
+        startTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        upcomingAppointments: [],
+        pastAppointments: [],
+        notifications: [],
+        selectedClinic: '',
+        selectedDate: '',
+        clinics: [],
+        showNotifications: false,
       }
+    },
+    mounted() {
+        this.getUserData()
+        this.getTimeslots(this.startTime)
+        this.getAllClinics()
+        this.getAllDentists()
     },
     methods: {
-      getUserInfo() {
-          
-      },
-      getUsersAppointments() {
-          
-      },
-      getTimeslots() {
-          Api.get('v1/timeslots')
-          .then(response => {
-              console.log(response.data)
-              this.timeslots = response.data
-          })
-          .catch(error => {
-              console.error(error.response.data)
-          })
-      },
-      bookTimeslot() {
-        Api.post('v1/appointments')
-      },
-      cancelAppoitment() {
-        Api.delete('v1/appointments')
-      }
-    },
-    };
+        getUserData() {
+        const token = localStorage.getItem('authToken')
+        
+        if (token) {
+            Api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            
+            Api.get('/v1/users/me')
+            .then(response => {
+                this.username = response.data.username
+                this.userId = response.data.id
+
+                this.getUsersAppointments()
+                this.getUsersNotifications()
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error)
+            })
+        }
+        },
+
+        getUsersAppointments() {
+            Api.get(`/v1/users/${this.userId}/appointments`)
+            .then(response => {
+                const allAppointments = response.data
+                
+                allAppointments.forEach(appointment => {
+                    const timeslotId = appointment.timeslot_id
+
+                    Api.get(`/v1/timeslots/${timeslotId}`)
+                    .then(response => {
+                        const timeslotEndTime = new Date(response.data.end_time)
+                        
+                        if (timeslotEndTime > this.startTime) {
+                            this.upcomingAppointments.push(appointment)
+                        } else {
+                            this.pastAppointments.push(appointment)
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error.response.data)
+                    })
+                })
+            })
+            .catch(error => {
+                console.error(error.response.data);
+            })
+        },
+
+        getUsersNotifications() {
+            Api.get(`/v1/users/${this.userId}/notifications`)
+            .then(response => {
+                this.notifications = response.data
+            })
+            .catch(error => {
+                console.error(error.response.data)
+            })
+        },
+
+        getTimeslots(startTime) {
+        Api.get('/v1/timeslots', startTime)
+        .then(response => {
+            console.log(response.data)
+            this.timeslots = response.data
+        })
+        .catch(error => {
+            console.error(error.response.data)
+        })
+        },
+
+        bookAppointment(timeslot) {
+            var newAppointment = {
+                timeslot_id: timeslot,
+                patient_id: this.userId,
+                dentist_id: '',
+                cancelled: false,
+                confirmed: true
+            }
+            Api.post('/v1/appointments/', newAppointment)
+            .then(response => {
+                console.log(response.data)
+                newAppointment = response.data
+            })
+            .catch(error => {
+                console.error(error.response.data)
+            })
+        },
+
+        cancelAppointment(timeslot) {
+            const cancelledAppointment = {
+                timeslot_id: timeslot,
+                cancelled: true
+            }
+            Api.patch(`/v1/appointments/`, cancelledAppointment)
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error(error.response.data)
+            })
+        },
+
+        getAllClinics() {
+            Api.get('/v1/clinics')
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error.response.data)
+                })
+        },
+
+        getAllDentists() {
+            Api.get('/v1/dentists')
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error(error.response.data)
+            })
+        },
+
+        filterByClinic() {
+            const clinicId = this.selectedClinic
+            const currentDate = new Date()
+            const startTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            
+            Api.get(`/v1/timeslots?clinic=${clinicId}&startTime=${startTime}`)
+            .then(response => {
+                this.timeslots = response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching timeslots:', error);
+            })
+        },
+
+        filterByDate() {
+            const currentDate = new Date(this.selectedDate)
+            const startTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            
+            Api.get(`/v1/timeslots?startTime=${startTime}`)
+            .then(response => {
+                this.timeslots = response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching timeslots:', error);
+            })
+        },
+
+        filterByDentist() {
+            const dentistId = this.selectedDentist
+            const currentDate = new Date()
+            const startTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            
+            Api.get(`/v1/timeslots?dentist=${dentistId}&startTime=${startTime}`)
+            .then(response => {
+                this.timeslots = response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching timeslots:', error);
+            })
+        },
+
+        openNotifications() {
+            this.showNotifications = true;
+        },
+        closeNotifications() {
+            this.showNotifications = false;
+  },
+    }
+}
 </script>
     
 <style>
