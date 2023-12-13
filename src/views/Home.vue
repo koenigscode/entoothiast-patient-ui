@@ -14,7 +14,7 @@
 
           <img src="../assets/notification.png" class="icon" @click="openNotifications">
           <router-link to="/settings"><img src="../assets/settings.png" class="icon"></router-link>
-          <img src="../assets/logout.png" class="icon">
+          <img src="../assets/logout.png" class="icon" @click="logout">
         </div>
           <h1>Welcome, {{ this.username }}</h1>
           <div class="columns">
@@ -89,7 +89,7 @@
       name: "Home-page",
       data() {
       return {
-        usernname: '',
+        username: '',
         userId: '',
         timeslots: [],
         startTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -127,6 +127,11 @@
                 console.error('Error fetching user data:', error)
             })
         }
+        },
+
+        logout() {
+            localStorage.removeItem('authToken')
+            this.$router.push('/login')
         },
 
         getUsersAppointments() {
