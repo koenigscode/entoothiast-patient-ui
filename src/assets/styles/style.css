@@ -71,7 +71,7 @@ select {
 }
 
 .secondary-btn {
-    background-color: #ffffff;
+    background-color: transparent;
     color: #C2AFD9;
     font-family: 'Playfair Display';
     border-radius: 0 20px;
