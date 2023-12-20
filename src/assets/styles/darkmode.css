@@ -15,7 +15,6 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
-    width: 100vw;
 }
 
 h1,
@@ -75,14 +74,12 @@ iframe {
     margin: 5% auto;
     box-shadow: var(--secondary-drop-shadow);
     text-align: left;
-    display: flex;
-    flex-direction: column;
 }
 
 .columns {
     display: flex;
     flex-direction: row;
-    margin-bottom: 5%;
+    margin: 5% auto;
 }
 
 .column {
@@ -159,10 +156,6 @@ iframe {
 }
 
 @media only screen and (max-width: 600px) {
-    iframe {
-        width: 100%;
-    }
-
     .logo {
         max-width: 50%;
     }
@@ -172,7 +165,7 @@ iframe {
     }
 
     .half-column {
-        width: 100%;
+        width: 120%;
     }
 
     .primary-btn {
@@ -190,15 +183,6 @@ iframe {
     }
 
     .off {
-        margin-bottom: 5%;
-    }
-
-    .filter {
-        margin-bottom: 2%;
-    }
-
-    .appointment {
-        width: 90%;
         margin-bottom: 5%;
     }
   }

@@ -9,9 +9,11 @@
           <p>Password</p>
           <input class="input-field" type="password" placeholder="Enter your password" v-model="password" required />
           <p>Re-type password</p>
-          <input class="input-field" type="password" placeholder="Re-type your password" v-model="password" required />
+          <input class="input-field" type="password" placeholder="Re-type your password" v-model="repeatedPassword" required />
           <br />
-          <button class="primary-btn">Submit</button>
+          <button class="primary-btn" @click="submitForm">Submit</button>
+          <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
           <br />
         <br />
         <a href="/login" class="signup-link">Login here</a>
@@ -23,12 +25,57 @@
   </template>
     
     <script>
+    import {Api} from '../Api';
     export default {
       name: "SignUp-page",
+      data() {
+    return {
+      name: '',
+      username: '',
+      password: '',
+      repeatedPassword: '',
+      errorMessage: '',
+      successMessage: ''
     };
-    </script>
+  },
+  methods: {
+    submitForm() {
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      if (this.password !== this.repeatedPassword) {
+        this.errorMessage = "Passwords do not match";
+        return;
+      }
+
+      const userData = {
+        name: this.name,
+        username: this.username,
+        password: this.password,
+        role: "patient"
+      };
+    console.log(Api)
+      Api.post('/v1/users/register', userData)
+        .then(response => {
+          console.log(response.data);
+          this.successMessage = "User registered. You can log in now.";
+        })
+        .catch(error => {
+          console.error(error.response.data);
+          this.errorMessage = "Error during registration. Please try again.";
+        });
+    },
+  },
+};
+</script>
     
     <style>
     @import url("../assets/styles/login-style.css");
+    .error-message {
+  color: red;
+}
+.success-message {
+  color: green;
+}
     </style>
     

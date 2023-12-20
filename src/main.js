@@ -21,6 +21,16 @@ app.use(PrimeVue);
 
 // Use PrimeVue components globally
 // eslint-disable-next-line vue/multi-word-component-names
+app.component('primeBtn', Button);
+
+// Use Vue Router
+app.use(router);
+
+// Use PrimeVue
+app.use(PrimeVue);
+
+// Use PrimeVue components globally
+// eslint-disable-next-line vue/multi-word-component-names
 app.component('Button', Button);
 // eslint-disable-next-line
 app.component('Rating', Rating);
