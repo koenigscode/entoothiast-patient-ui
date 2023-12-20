@@ -124,3 +124,10 @@ p {
 .rating-container {
   margin-left: 10px;
 }
+.iconbar {
+  text-align: right;
+}
+.icon {
+  width: 2rem;
+  margin-left: 2rem;
+}
