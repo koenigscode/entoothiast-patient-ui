@@ -48,7 +48,7 @@
                 <div class="dentists">
                 <div class="oneDentist">
                 <div class="dentist-info">
-                <img src="../assets/favorite.png" class="dentist-image">
+                <img src="../assets/favourite.png" class="dentist-image">
                 <div>
                  <p><b>Dentist Name</b></p>
                 <p>Dentist Clinic</p>
@@ -59,7 +59,7 @@
 
               <div class="oneDentist">
                 <div class="dentist-info">
-                <img src="../assets/favorite.png" class="dentist-image">
+                <img src="../assets/favourite.png" class="dentist-image">
                 <div>
                  <p><b>Dentist Name</b></p>
                 <p>Dentist Clinic</p>
