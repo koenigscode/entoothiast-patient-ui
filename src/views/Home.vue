@@ -103,7 +103,7 @@
                     name="OpenStreetMap"
                 > </l-tile-layer>
                 <l-control-scale position="topright" :imperial="true" :metric="true" ></l-control-scale>
-               <l-marker v-for="clinic in clinics" :key="clinic.id" :lat-lng="[clinic.lat, clinic.lng]">
+                <l-marker v-for="clinic in clinics" :key="clinic.id" :lat-lng="[clinic.latitude, clinic.longitude]">
                 <l-tooltip> {{ clinic.name }}</l-tooltip>
                </l-marker>
                 </l-map>  
@@ -117,6 +117,7 @@
   <script>
   import "leaflet/dist/leaflet.css";
   import { LMap, LTileLayer, LMarker, LTooltip, LControlScale } from "@vue-leaflet/vue-leaflet";
+  import { Api } from "@/Api";
 
   export default {
     name: "Home-page",
@@ -130,31 +131,25 @@
     data() {
         return {
         zoom: 11.5,
-        clinics: [
-            {
-                "name": "HealthCare Clinic",
-                "id": "1",
-                "location" : "57.700643, 11.947941",
-                "lat": "57.700643",
-                "lng": "11.947941"
-            },
-            {
-                "name": "Wellness Center",
-                "id": "2",
-                "location": "57.702514, 11.980594",
-                "lat": "57.702514",
-                "lng": " 11.980594"
-            },
-            {
-                "name": "DentStar",
-                "id": "3",
-                "location": "57.703245, 11.970594",
-                "lat": "57.703245",
-                "lng": " 11.970594"
-            }
-        ]
+        clinics: []
         }
+  },
+  created() {
+    this.getAllClinics()
+  },
+methods: {
+getAllClinics() {
+Api.get('/v1/clinics')
+.then((res) => {
+    this.clinics = res.data.clinics
+    console.log(res.data.clinics)
+})
+.catch((err) => {
+    console.log(err)
+})
+}
   }
+  
 }
   </script>
   

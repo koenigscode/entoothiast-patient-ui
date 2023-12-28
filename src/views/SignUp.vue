@@ -54,14 +54,13 @@
         password: this.password,
         role: "patient"
       };
-    console.log(Api)
       Api.post('/v1/users/register', userData)
         .then(response => {
-          console.log(response.data);
+          console.log(response);
           this.successMessage = "User registered. You can log in now.";
         })
         .catch(error => {
-          console.error(error.response.data);
+          console.error(error);
           this.errorMessage = "Error during registration. Please try again.";
         });
     },
