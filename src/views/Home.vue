@@ -92,12 +92,12 @@
         username: '',
         userId: '',
         timeslots: [],
-        startTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        startTime: new Date().toISOString().slice(0, 19).replace("T", " "),
         upcomingAppointments: [],
         pastAppointments: [],
         notifications: [],
         selectedClinic: '',
-        selectedDate: '',
+        selectedDate: new Date().toISOString().split('T')[0],
         selectedDentist: '',
         clinics: [],
         dentists: [],
@@ -108,6 +108,7 @@
         this.getUserData()
         this.getAllClinics()
         this.getAllDentists()
+        this.getTimeslots(this.startTime)
     },
     methods: {
         getUserData() {
@@ -174,14 +175,15 @@
         },
 
         getTimeslots(startTime) {
-        Api.get('/v1/timeslots', startTime)
-        .then(response => {
-            console.log(response.data)
-            this.timeslots = response.data
-        })
-        .catch(error => {
-            console.error(error.response.data)
-        })
+            console.log('calling timeslots')
+            Api.get('/v1/timeslots', { params: { start_time: startTime }})
+            .then(response => {
+                console.log(response.data)
+                this.timeslots = response.data
+            })
+            .catch(error => {
+                console.error(error.response.data)
+            })
         },
 
         bookAppointment(timeslot) {
