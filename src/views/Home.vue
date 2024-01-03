@@ -44,13 +44,13 @@
               <div>
                 <select v-model="selectedClinic" @change="filterByClinic" id="clinicFilter" class="filter">
                     <option value="">All Clinics</option>
-                    <option v-for="clinic in clinics" :key="clinic.id" :value="clinic.id">{{ clinic.name }}</option>
+                    <option v-for="clinic in clinics.clinics" :key="clinic.id" :value="clinic.id">{{ clinic.name }}</option>
                 </select>
               </div>
               <div>
                 <select v-model="selectedDentist" @change="filterByDentist" id="dentistFilter" class="filter">
                     <option value="">All Dentists</option>
-                    <option v-for="dentist in dentists" :key="dentist.id" :value="dentist.id">{{ dentist.name }}</option>
+                    <option v-for="dentist in dentists.dentists" :key="dentist.id" :value="dentist.id">{{ dentist.name }}</option>
                 </select>
               </div>
           </div>
@@ -98,27 +98,28 @@
         notifications: [],
         selectedClinic: '',
         selectedDate: '',
+        selectedDentist: '',
         clinics: [],
+        dentists: [],
         showNotifications: false,
       }
     },
     mounted() {
         this.getUserData()
-        this.getTimeslots(this.startTime)
         this.getAllClinics()
         this.getAllDentists()
     },
     methods: {
         getUserData() {
         const token = localStorage.getItem('authToken')
+        this.userId = localStorage.getItem('userId')
         
-        if (token) {
+        if (token && this.userId) {
             Api.defaults.headers.common['Authorization'] = `Bearer ${token}`
             
-            Api.get('/v1/users/me')
+            Api.get(`/v1/users/${this.userId}`)
             .then(response => {
                 this.username = response.data.username
-                this.userId = response.data.id
 
                 this.getUsersAppointments()
                 this.getUsersNotifications()
@@ -219,6 +220,7 @@
             Api.get('/v1/clinics')
                 .then(response => {
                     console.log(response.data)
+                    this.clinics = response.data
                 })
                 .catch(error => {
                     console.error(error.response.data)
@@ -229,6 +231,7 @@
             Api.get('/v1/dentists')
             .then(response => {
                 console.log(response.data)
+                this.dentists = response.data
             })
             .catch(error => {
                 console.error(error.response.data)
