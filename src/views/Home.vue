@@ -178,8 +178,8 @@
             console.log('calling timeslots')
             Api.get('/v1/timeslots', { params: { startTime: startTime }})
             .then(response => {
-                console.log(response.data)
-                this.timeslots = response.data
+                console.log(response.data.timeslots)
+                this.timeslots = response.data.timeslots
             })
             .catch(error => {
                 console.error(error.response.data)
