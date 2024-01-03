@@ -2,20 +2,6 @@
   <body>
       <img src="../assets/entoothiast.png" class="logo">
       <div class="container">
-        <div class="iconbar">
-            <div v-if="showNotifications" class="notification-modal">
-                <h2 style="color: black;">Notifications</h2>
-                <ul><li v-for="notification in notifications" :key="notification.id">
-                        <p><b>{{ notification.timeslot_id }}</b></p><br>
-                        <p>{{ notification.message }}</p>
-                  </li></ul>
-                <button @click="closeNotifications" class="close">Close notifications</button>
-            </div>
-
-          <img src="../assets/notification.png" class="icon" @click="openNotifications">
-          <router-link to="/settings"><img src="../assets/settings.png" class="icon"></router-link>
-          <img src="../assets/logout.png" class="icon" @click="logout">
-        </div>
           <h1>All dentists</h1>
           <div class="columns">
               <div class="half-column">
@@ -30,14 +16,18 @@
                       </div>
                   </li></ul>
               </div>
+
               <div class="half-column">
                 <h2>Your favourite dentists</h2>
                 <ul><li v-for="dentist in dentists.dentists" :key="dentist.id">
                 <div class="dentist-list">
-                    <p><b>{{ dentist.name }}</b></p>
+                  <img src="../assets/favourite.png" class="dentist-icon" style="width: 3.5rem;">
+                  <p><b>{{ dentist.name }}</b></p>
                 </div></li></ul>
               </div>
+
       </div>
+      <button class="secondary-btn" style="margin-top: 5rem; width: 10rem;" @click="goBack">Back</button>
     </div>
   </body>
 </template>
@@ -52,6 +42,7 @@ import {Api} from '../Api';
         return {
             dentists: [],
             clinicName: '',
+            showNotifications: false,
         }
     },
     mounted() {
@@ -67,7 +58,11 @@ import {Api} from '../Api';
             .catch(error => {
                 console.error(error.response.data)
             })
-        }
+        },
+
+        goBack() {
+          this.$router.go(-1)
+        },
     }
   };
 
