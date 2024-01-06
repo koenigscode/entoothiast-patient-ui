@@ -56,6 +56,11 @@ data() {
         console.log("User ID:", userId)
         localStorage.setItem('userId', userId)
 
+        const userId = response.data.user.id
+        console.log("User ID:", userId)
+        localStorage.setItem('userId', userId)
+
+
           this.successMessage = "Login successful";
           this.$router.push({ name: 'Home-page' }); 
         })
