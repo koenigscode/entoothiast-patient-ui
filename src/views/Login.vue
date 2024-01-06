@@ -51,9 +51,13 @@ data() {
 
         const token = response.data.token;
         localStorage.setItem('authToken', token);
+        
+        const userId = response.data.user.id
+        console.log("User ID:", userId)
+        localStorage.setItem('userId', userId)
 
           this.successMessage = "Login successful";
-           this.$router.push({ name: 'Home-page' }); 
+          this.$router.push({ name: 'Home-page' }); 
         })
         .catch(error => {
           console.error(error);
