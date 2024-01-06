@@ -9,6 +9,7 @@
   color: #000000;
   background: linear-gradient(180deg, rgb(251.58, 248.6, 255) 0%, rgb(194, 175, 217) 100%);
   margin: 0;
+  padding: 5% 0;
   min-height: 100vh;
 }
 
@@ -55,13 +56,18 @@ p {
   padding: 0.8rem 3.4rem;
   font-size: 1.3rem;
   margin-right: 2%;
-  transition: background-color 0.3s ease;
+}
+.secondary-btn {
+  background-color: #ffffff;
+  color: #C2AFD9;
+  font-family: 'Playfair Display';
+  border-radius: 0 20px;
+  border: 1px solid #C2AFD9;
+  padding: 0.8rem 3.4rem;
+  font-size: 1.3rem;
+  margin-right: 2%;
 }
 
-.primary-btn:hover {
-  background-color: #8a7aae;
-  cursor: pointer;
-}
 
 .login-container {
   flex: 1;
@@ -82,4 +88,46 @@ p {
 .signup-link {
   color: #C2AFD9;
   text-decoration: underline;
+}
+
+.columns {
+  display: flex;
+  flex-direction: row;
+  margin: 5% auto;
+}
+
+.half-column {
+  width: 50%;
+}
+.dentists {
+  width: 70%;
+  padding: 1rem;
+  margin-right: 2%;
+}
+
+.dentist-image {
+  width: 4rem; 
+  margin-right: 1rem;
+}
+
+.oneDentist {
+  display: flex;
+  align-items: center;
+}
+
+.dentist-info {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.rating-container {
+  margin-left: 10px;
+}
+.iconbar {
+  text-align: right;
+}
+.icon {
+  width: 2rem;
+  margin-left: 2rem;
 }
