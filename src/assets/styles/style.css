@@ -114,6 +114,16 @@ select {
     box-shadow: var(--secondary-drop-shadow);
 }
 
+.timeslotBox {
+    border: 1px solid #C2AFD9;
+    border-radius: 0 30px;
+    width: 100%;
+    padding: 1rem;
+    margin-right: 5%;
+    margin-bottom: 5%;
+    box-shadow: var(--secondary-drop-shadow);
+}
+
 .filter {
     background-color: #C2AFD9;
     border-radius: 0 30px;

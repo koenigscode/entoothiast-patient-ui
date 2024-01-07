@@ -16,7 +16,7 @@
           <router-link to="/settings"><img src="../assets/settings.png" class="icon"></router-link>
           <img src="../assets/logout.png" class="icon" @click="logout">
         </div>
-          <h1>Welcome, {{ this.username }}</h1>
+          <h1>Welcome, {{ username }}</h1>
           <div class="columns">
               <div class="half-column">
                   <h2>Your next appointment</h2>
@@ -59,7 +59,7 @@
               <ul>
                   <li v-for="timeslot in timeslots" :key="timeslot.id">
                       <div class="appointment">
-                          <p><b>{{ timeslot.start_time }} {{ timeslot.end_time }}</b><br>{{ timeslot.dentist_id }}</p>
+                        <p><b>{{ formatDateTime(timeslot.start_time) }}</b><br>{{ timeslot.dentist_id }}</p>
                           <p><img src="../assets/book.png" class="book" @click="bookAppointment(timeslot.id)"> Book appointment</p>
                       </div>
                   </li>
@@ -85,6 +85,7 @@
     
 <script>
     import {Api} from '../Api';
+    import moment from 'moment';
     export default {
       name: "Home-page",
       data() {
@@ -113,15 +114,16 @@
     methods: {
         getUserData() {
         const token = localStorage.getItem('authToken')
-        this.userId = localStorage.getItem('userId')
+        const userId = localStorage.getItem('userId')
         
-        if (token && this.userId) {
+        if (token && userId) {
             Api.defaults.headers.common['Authorization'] = `Bearer ${token}`
             
-            Api.get(`/v1/users/${this.userId}`)
+            Api.get(`/v1/users/${userId}`)
             .then(response => {
-                this.username = response.data.username
-
+                const userData = response.data.message[0];
+                this.username = userData.username;
+                this.name = userData.name;
                 this.getUsersAppointments()
                 this.getUsersNotifications()
             })
@@ -287,6 +289,9 @@
         closeNotifications() {
             this.showNotifications = false;
   },
+  formatDateTime(dateTime) {
+      return moment(dateTime).format('DD-MM-YYYY HH:mm');
+    },
     }
 }
 </script>
