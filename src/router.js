@@ -4,6 +4,7 @@ import Settings from './views/Settings.vue';
 
 import SignUp from './views/SignUp.vue';
 import Login from './views/Login.vue';
+import AllDentists from './views/AllDentists.vue';
 const routes = [
   {
     path: '/',
@@ -24,6 +25,11 @@ const routes = [
     path: '/signup',
     name: 'SignUp-page',
     component: SignUp,
+  },
+  {
+    path: '/dentists',
+    name: 'AllDentists-page',
+    component: AllDentists,
   }
 ];
 
