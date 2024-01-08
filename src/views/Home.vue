@@ -15,7 +15,7 @@
           <router-link to="/settings"><img src="../assets/settings.png" class="icon"></router-link>
           <img src="../assets/logout.png" class="icon" @click="logout">
         </div>
-          <h1>Welcome, {{ username }}</h1>
+          <h1>Welcome, {{ name }}</h1>
           <div class="columns">
               <div class="half-column">
                   <h2>Your next appointment</h2>
@@ -59,7 +59,7 @@
                   <li v-for="timeslot in timeslots" :key="timeslot.id">
                       <div class="appointment">
                         <p><b>{{ formatDateTime(timeslot.start_time) }}</b><br>{{ timeslot.dentist_id }}</p>
-                          <p><img src="../assets/book.png" class="book" @click="bookAppointment(timeslot.id)"> Book appointment</p>
+                          <p><img src="../assets/book.png" class="book" @click="bookAppointment(timeslot)"> Book appointment</p>
                       </div>
                   </li>
               </ul>
@@ -90,6 +90,7 @@
       data() {
       return {
         username: '',
+        name: '',
         userId: '',
         timeslots: [],
         startTime: new Date().toISOString().slice(0, 19).replace("T", " "),
@@ -211,13 +212,9 @@
             console.error('User ID not found in local storage.');
             return;
         }
-
-        // Send a PATCH request to mark all notifications as read
         Api.patch(`/v1/users/${userId}/notifications`)
             .then(response => {
                 console.log('Notifications marked as read:', response.data);
-                // Optionally, you can update the local state if needed
-              //  this.notifications = [];
                 this.showNotifications = false;
             })
             .catch(error => {
@@ -238,14 +235,17 @@
         },
 
         bookAppointment(timeslot) {
+            const userId = localStorage.getItem('userId');
+            console.log('Timeslot object:', timeslot);
             var newAppointment = {
-                timeslot_id: timeslot,
-                patient_id: this.userId,
-                dentist_id: '',
+                timeslot_id: timeslot.id,
+                patient_id: userId,
+                dentist_id: timeslot.dentist_id,
                 cancelled: false,
                 confirmed: true
             }
-            Api.post('/v1/appointments/', newAppointment)
+            console.log(newAppointment)
+            Api.post('/v1/appointments', newAppointment)
             .then(response => {
                 console.log(response.data)
                 newAppointment = response.data
@@ -273,7 +273,7 @@
             Api.get('/v1/clinics')
                 .then(response => {
                     console.log(response.data)
-                    this.clinics = response.data
+                    this.clinics = response.data.clinics
                 })
                 .catch(error => {
                     console.error(error.response.data)
