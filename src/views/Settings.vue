@@ -2,53 +2,100 @@
   <body>
     <img src="../assets/entoothiast.png" class="logo">
     <div class="container">
-      <div class="iconbar">
-        <img src="../assets/settings.png" class="icon">
-        <img src="../assets/logout.png" class="icon">
-      </div>
       <h1>Settings</h1>
       <div class="columns">
         <div class="half-column">
+            <p><b>Change name</b></p>
+            <input class="input-field" type="name" placeholder="Enter new name" v-model="name" required />
+
             <p><b>Change password</b></p>
-            <p>New password</p>
-            <div class="input-field"></div>
-
-            <p>New password again</p>
-            <div class="input-field"></div>
-
-            <p><b>Notifications</b></p>
-            <div class="columns">
-                <div class="on">On</div>
-                <div class="off">Off</div>
-            </div>
+            <input class="input-field" type="password" placeholder="Enter new password" v-model="password" required />
         </div>
 
         <div class="half-column">
-            <p><b>Change email</b></p>
-            <p>New email</p>
-            <div class="input-field"></div>
+            <p><b>Change username</b></p>
+            <input class="input-field" type="username" placeholder="Enter new username" v-model="username" required />
 
-            <p>New email again</p>
-            <div class="input-field"></div>
-
-            <p><b>Dark mode</b></p>
-            <div class="columns">
-                <div class="off">On</div>
-                <div class="on">Off</div>
-            </div>
+            <p><b>Confirm password</b></p>
+            <input class="input-field" type="password" placeholder="Confirm new password" v-model="confirmPassword" required />
         </div>
     </div>
 
-    <button class="primary-btn">Save</button>
-    <button class="secondary-btn">Back</button>
+    <div class="columns">
+      <button class="primary-btn" @click="updateInfo">Save</button>
+      <button class="secondary-btn" @click="goBack">Back</button>
+    </div>
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
 
-  </div>
-</body>
+
+    </div>
+  </body>
 </template>
 
 <script>
+import {Api} from '../Api';
+
 export default {
-  name: "Settings-page",
+    name: 'Settings-page',
+    data() {
+        return {
+            username: '',
+            name: '',
+            password: '',
+            confirmPassword: '',
+            errorMessage: '',
+            successMessage: '',
+        };
+    },
+  
+    methods: {
+      updateInfo() {
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Password and Confirm Password must match.';
+      return;
+    }
+      const userData = {
+        name: this.name,
+        username: this.username,
+        password: this.password
+      };
+
+      const userId = localStorage.getItem('userId');
+
+      if (!userId) {
+      this.errorMessage = "User ID not found. Please try logging in again.";
+      return;
+      }
+      Api.patch(`/v1/users/${userId}`, userData)
+        .then(response => {
+          console.log(response.data);
+          this.successMessage = "Profile info updated successfully.";
+          
+          // Reset form fields after successful update
+          this.username = "";
+          this.name = "";
+          this.password= "";
+          this.confirmPassword= "";
+        })
+        .catch(error => {
+          console.error(error.response.data);
+          this.errorMessage = "Error during update. Please try again.";
+        });
+    },
+        toggleDarkMode(value) {
+          this.darkMode = value
+        },
+        toggleNot(value) {
+          this.isNotification = value
+        },
+        goBack() {
+          this.$router.go(-1)
+        }
+    }
 };
 </script>
 
