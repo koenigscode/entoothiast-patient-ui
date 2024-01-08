@@ -61,10 +61,17 @@ select {
     padding: 0.8rem 3.4rem;
     font-size: 1.3rem;
     margin-right: 2%;
+    transition: .3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    background-color: #000000;
 }
 
 .secondary-btn {
-    background-color: #ffffff;
+    background-color: transparent;
     color: #C2AFD9;
     font-family: 'Playfair Display';
     border-radius: 0 20px;
@@ -72,6 +79,14 @@ select {
     padding: 0.8rem 3.4rem;
     font-size: 1.3rem;
     margin-right: 2%;
+    transition: .3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.secondary-btn:hover {
+    background-color: #C2AFD9;
+    color: #ffffff;
 }
 
 .container {
@@ -82,6 +97,8 @@ select {
     margin: 5% auto;
     box-shadow: var(--secondary-drop-shadow);
     text-align: left;
+    display: flex;
+    flex-direction: column;
     display: flex;
     flex-direction: column;
 }
@@ -164,6 +181,7 @@ input[type="date"] {
     height: 3rem;
     width: 70%;
     margin-bottom: 5%;
+    margin-top: 5%;
 }
 
 .notification-modal {
@@ -205,6 +223,11 @@ input[type="date"] {
     padding: 0.5rem 1.5rem;
     margin-right: 5%;
     text-align: center;
+    cursor: pointer;
+}
+
+.on:hover {
+    background-color: #BABABA;
 }
 
 .off {
@@ -218,6 +241,11 @@ input[type="date"] {
     padding: 0.5rem 1.5rem;
     margin-right: 5%;
     text-align: center;
+    cursor: pointer;
+}
+
+.off:hover {
+    background-color: #C2AFD9;
 }
 
 .iconbar {
@@ -249,11 +277,13 @@ input[type="date"] {
     .primary-btn {
         font-size: 1rem;
         padding: 0.8rem 3rem;
+        margin-bottom: 1rem;
     }
 
     .secondary-btn {
         font-size: 1rem;
         padding: 0.8rem 3rem;
+        margin-bottom: 1rem;
     }
 
     .on {
