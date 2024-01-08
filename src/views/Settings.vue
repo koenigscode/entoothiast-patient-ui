@@ -6,26 +6,18 @@
       <div class="columns">
         <div class="half-column">
             <p><b>Change name</b></p>
-            
             <input class="input-field" type="name" placeholder="Enter new name" v-model="name" required />
 
-            <p><b>Notifications</b></p>
-            <div class="columns">
-              <div class="on" @click="toggleNot(false)" :class="{ off: !isNotification }">On</div>
-              <div class="on" @click="toggleNot(true)" :class="{ off: isNotification }">Off</div>
-            </div>
+            <p><b>Change password</b></p>
+            <input class="input-field" type="password" placeholder="Enter new password" v-model="password" required />
         </div>
 
         <div class="half-column">
             <p><b>Change username</b></p>
-       
             <input class="input-field" type="username" placeholder="Enter new username" v-model="username" required />
 
-            <p><b>Dark mode</b></p>
-            <div class="columns">
-              <div class="on" @click="toggleDarkMode(false)" :class="{ off: !darkMode }">On</div>
-              <div class="on" @click="toggleDarkMode(true)" :class="{ off: darkMode }">Off</div>
-            </div>
+            <p><b>Confirm password</b></p>
+            <input class="input-field" type="password" placeholder="Confirm new password" v-model="confirmPassword" required />
         </div>
     </div>
 
@@ -50,8 +42,8 @@ export default {
         return {
             username: '',
             name: '',
-            darkMode: false,
-            isNotification: true,
+            password: '',
+            confirmPassword: '',
             errorMessage: '',
             successMessage: '',
         };
@@ -62,9 +54,14 @@ export default {
       this.errorMessage = '';
       this.successMessage = '';
 
+      if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Password and Confirm Password must match.';
+      return;
+    }
       const userData = {
         name: this.name,
         username: this.username,
+        password: this.password
       };
 
       const userId = localStorage.getItem('userId');
@@ -81,8 +78,8 @@ export default {
           // Reset form fields after successful update
           this.username = "";
           this.name = "";
-          this.darkMode = false;
-          this.isNotification = true;
+          this.password= "";
+          this.confirmPassword= "";
         })
         .catch(error => {
           console.error(error.response.data);
