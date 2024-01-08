@@ -8,7 +8,7 @@
                 <ul><li v-for="notification in notifications" :key="notification.id">
                         <p>{{ notification.message }}</p><br>
                   </li></ul>
-                <button @click="closeNotifications" class="close">Close notifications</button>
+                <button @click="markNotificationsAsRead" class="close">Mark as read</button>
             </div>
 
           <img src="../assets/notification.png" class="icon" @click="openNotifications">
@@ -202,6 +202,27 @@
 
     beforeDestroy() {
         clearInterval(this.notificationInterval);
+    },
+
+    markNotificationsAsRead() {
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            console.error('User ID not found in local storage.');
+            return;
+        }
+
+        // Send a PATCH request to mark all notifications as read
+        Api.patch(`/v1/users/${userId}/notifications`)
+            .then(response => {
+                console.log('Notifications marked as read:', response.data);
+                // Optionally, you can update the local state if needed
+              //  this.notifications = [];
+                this.showNotifications = false;
+            })
+            .catch(error => {
+                console.error('Error marking notifications as read:', error.response.data);
+            });
     },
 
         getTimeslots(startTime) {
