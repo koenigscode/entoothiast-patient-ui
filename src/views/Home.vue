@@ -55,7 +55,7 @@
           </div>
   
           <div class="columns">
-              <ul>
+              <ul id = "appointment">
                   <li v-for="timeslot in timeslots" :key="timeslot.id">
                       <div class="appointment">
                         <p><b>{{ formatDateTime(timeslot.start_time) }}</b><br>{{ timeslot.dentist_id }}</p>
@@ -69,8 +69,8 @@
               <div class="half-column">
                   <h2>Statistics</h2>
                   <ul>
-                      <li>Total of <b>2</b> appointments this year.</li>
-                      <li>Your most used dentist is <b>Dentist Name</b>.</li>
+                      <li>You have a total of <b>{{ appointmentsThisYear }}</b> appointments this year.</li>
+                      <li>Your most used dentist is <b>{{ mostUsedDentist }}</b>.</li>
                   </ul>
               </div>
               <div class="half-column">
@@ -103,6 +103,8 @@
         clinics: [],
         dentists: [],
         showNotifications: false,
+        appointmentsThisYear: 0,
+        mostUsedDentist: '',
       }
     },
     mounted() {
@@ -110,6 +112,7 @@
         this.getAllClinics()
         this.getAllDentists()
         this.getTimeslots(this.startTime)
+        this.getUserStatistics()
     },
     methods: {
         getUserData() {
@@ -338,6 +341,31 @@
         closeNotifications() {
             this.showNotifications = false;
   },
+ 
+  getUserStatistics() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.error('User ID not found in local storage.');
+      return;
+    }
+
+    Api.get(`/v1/statistics/appointments-in-year/users/${userId}`)
+      .then(response => {
+        this.appointmentsThisYear = response.data.numberOfAppointments;
+      })
+      .catch(error => {
+        console.error('Error fetching user statistics:', error.response.data);
+      });
+
+    Api.get(`/v1/statistics/most-used-dentist/users/${userId}`)
+      .then(response => {
+        this.mostUsedDentist = response.data.name;
+      })
+      .catch(error => {
+        console.error('Error fetching most used dentist statistics:', error.response.data);
+      });
+  },
+
   formatDateTime(dateTime) {
       return moment(dateTime).format('DD-MM-YYYY HH:mm');
     },
