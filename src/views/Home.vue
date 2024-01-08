@@ -6,8 +6,7 @@
             <div v-if="showNotifications" class="notification-modal">
                 <h2 style="color: black;">Notifications</h2>
                 <ul><li v-for="notification in notifications" :key="notification.id">
-                        <p><b>{{ notification.timeslot_id }}</b></p><br>
-                        <p>{{ notification.message }}</p>
+                        <p>{{ notification.message }}</p><br>
                   </li></ul>
                 <button @click="closeNotifications" class="close">Close notifications</button>
             </div>
@@ -138,10 +137,18 @@
             this.$router.push('/login')
         },
 
+        
         getUsersAppointments() {
-            Api.get(`/v1/users/${this.userId}/appointments`)
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+            console.error('User ID not found in local storage.');
+            return;
+            }
+
+            Api.get(`/v1/users/${userId}/appointments`)
             .then(response => {
-                const allAppointments = response.data
+                const allAppointments = response.data.message
                 
                 allAppointments.forEach(appointment => {
                     const timeslotId = appointment.timeslot_id
@@ -167,14 +174,35 @@
         },
 
         getUsersNotifications() {
-            Api.get(`/v1/users/${this.userId}/notifications`)
+        const userId = localStorage.getItem('userId');
+
+        if (!userId) {
+            console.error('User ID not found in local storage.');
+            return;
+        }
+
+        this.fetchNotifications(userId);
+
+        // Set up interval to fetch notifications every 5 seconds
+        this.notificationInterval = setInterval(() => {
+            this.fetchNotifications(userId);
+        }, 5000);
+    },
+
+    fetchNotifications(userId) {
+        Api.get(`/v1/users/${userId}/notifications`)
             .then(response => {
-                this.notifications = response.data
+                this.notifications = response.data.notifications;
+                console.log(response.data.notifications);
             })
             .catch(error => {
-                console.error(error.response.data)
-            })
-        },
+                console.error(error.response.data);
+            });
+    },
+
+    beforeDestroy() {
+        clearInterval(this.notificationInterval);
+    },
 
         getTimeslots(startTime) {
             console.log('calling timeslots')
