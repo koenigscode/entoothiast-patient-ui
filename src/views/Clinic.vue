@@ -1,42 +1,25 @@
 <template>
     <div class="container">
         <h1>{{clinicName}}</h1>
+
+
         <div class="dentists">
             <div v-for="dentist in dentists" :key="dentist.id">
                 <div class="oneDentist">
-                    <div class="dentist-info">
-                        <img src="../assets/dentists.png" class="dentist-image" />
-                        <div>
-                            <p><b>{{ dentist.username }}</b></p>
+                    <img src="../assets/dentists.png" class="dentist-image" />
+                    <b>{{ dentist.username }}</b>
+
+                    <div v-for="timeslot in allTimeslots" :key="timeslot.id">
+                        <div class="appointment" v-show="timeslot.dentist_id === dentist.id">
+                            <b>{{ timeslot.start_time }} {{ timeslot.end_time }}</b><br>{{ dentist.username }}
                         </div>
-                    </div>
-                    <br />
-                    <div class="dentist-timeslots"> 
-                        <div class="dentist-timeslots">
-                            <div v-for="timeslot in allTimeslots" :key="timeslot.id">
-                            <div v-if="!(timeslot.dentist_id === dentist.id)"><p>No available timeslots for {{ dentist.username }}</p></div>
-                            <div class="appointment" v-else-if="timeslot.dentist_id === dentist.id">
-                            <p><b>{{ timeslot.start_time }} {{ timeslot.end_time }}</b><br>{{ dentist.username }}</p>
-                            </div>
-                            </div>
-                        </div>
-                    <br />
-                    </div>
-                     <div class="dentist-timeslots"> 
-                        <div class="dentist-timeslots">
-                            <div v-for="timeslot in allTimeslots" :key="timeslot.id">
-                            <div v-if="!(timeslot.dentist_id === dentist.id)"><p>No available timeslots for {{ dentist.username }}</p></div>
-                            <div class="appointment" v-else-if="timeslot.dentist_id === dentist.id">
-                            <p><b>{{ timeslot.start_time }} {{ timeslot.end_time }}</b><br>{{ dentist.username }}</p>
-                            </div>
-                            </div>
-                        </div>
-                    <br />
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+        
 </template>
 <script>
 import { Api } from '@/Api';
