@@ -5,7 +5,7 @@
           <h1>All dentists</h1>
           <div class="columns">
               <div class="half-column">
-                  <h2>Dentists</h2>
+
                   <ul><li v-for="dentist in dentists.dentists" :key="dentist.id">
                     <div class="dentist-list">
                           <img src="../assets/dentists.png" class="dentist-icon">
@@ -17,14 +17,7 @@
                   </li></ul>
               </div>
 
-              <div class="half-column">
-                <h2>Your favourite dentists</h2>
-                <ul><li v-for="dentist in dentists.dentists" :key="dentist.id">
-                <div class="dentist-list">
-                  <img src="../assets/favourite.png" class="dentist-icon" style="width: 3.5rem;">
-                  <p><b>{{ dentist.name }}</b></p>
-                </div></li></ul>
-              </div>
+
 
       </div>
       <button class="secondary-btn" style="margin-top: 5rem; width: 10rem;" @click="goBack">Back</button>
