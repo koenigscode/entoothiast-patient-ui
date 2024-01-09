@@ -59,6 +59,7 @@ data() {
 
           this.successMessage = "Login successful";
           this.$router.push({ name: 'Home-page' }); 
+          
         })
         .catch(error => {
           console.error(error);
