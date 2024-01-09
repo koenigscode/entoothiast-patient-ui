@@ -38,18 +38,18 @@
           <h2>Book appointment</h2>
           <div class="columns" id="lessMargin">
               <div>
-                <input type="date" v-model="selectedDate" @change="filterByDate" id="dateFilter" class="filter">
+                <input type="date" v-model="selectedDate" @input="filterByDate" id="dateFilter" class="filter">
               </div>
               <div>
                 <select v-model="selectedClinic" @change="filterByClinic" id="clinicFilter" class="filter">
                     <option value="">All Clinics</option>
-                    <option v-for="clinic in clinics.clinics" :key="clinic.id" :value="clinic.id">{{ clinic.name }}</option>
+                    <option v-for="clinic in clinics" :key="clinic.id" :value="clinic.name">{{ clinic.name }}</option>
                 </select>
               </div>
               <div>
                 <select v-model="selectedDentist" @change="filterByDentist" id="dentistFilter" class="filter">
                     <option value="">All Dentists</option>
-                    <option v-for="dentist in dentists.dentists" :key="dentist.id" :value="dentist.id">{{ dentist.name }}</option>
+                    <option v-for="dentist in dentists" :key="dentist.id" :value="dentist.name">{{ dentist.name }}</option>
                 </select>
               </div>
           </div>
@@ -58,11 +58,13 @@
               <ul id = "appointment">
                   <li v-for="timeslot in timeslots" :key="timeslot.id">
                       <div class="appointment">
-                        <p><b>{{ formatDateTime(timeslot.start_time) }}</b><br>{{ timeslot.dentist_id }}</p>
+                        <p><b>{{ formatDateTime(timeslot.start_time) }}</b><br>{{ timeslot.dentist_name }}</p>
                           <p><img src="../assets/book.png" class="book" @click="bookAppointment(timeslot)"> Book appointment</p>
                       </div>
                   </li>
               </ul>
+              <div v-if="noTimeslotsMessage" class="no-timeslots-message">{{ noTimeslotsMessage }}</div>
+
           </div>
   
           <div class="columns">
@@ -105,6 +107,7 @@
         showNotifications: false,
         appointmentsThisYear: 0,
         mostUsedDentist: '',
+        noTimeslotsMessage: '',
       }
     },
     mounted() {
@@ -227,10 +230,23 @@
 
         getTimeslots(startTime) {
             console.log('calling timeslots')
-            Api.get('/v1/timeslots', { params: { startTime: startTime }})
+
+            const params = { startTime: startTime };
+
+            if (this.selectedClinic) {
+            params.clinic = this.selectedClinic;
+            }
+
+            if (this.selectedDentist) {
+            params.dentist = this.selectedDentist;
+            }
+            Api.get('/v1/timeslots', { params: params})
             .then(response => {
                 console.log(response.data.timeslots)
-                this.timeslots = response.data.timeslots
+                this.timeslots = response.data.timeslots.map(timeslot => ({
+                ...timeslot,
+                dentist: timeslot.dentist_name,
+            }));
             })
             .catch(error => {
                 console.error(error.response.data)
@@ -287,7 +303,7 @@
             Api.get('/v1/dentists')
             .then(response => {
                 console.log(response.data)
-                this.dentists = response.data
+                this.dentists = response.data.dentists
             })
             .catch(error => {
                 console.error(error.response.data)
@@ -295,13 +311,18 @@
         },
 
         filterByClinic() {
-            const clinicId = this.selectedClinic
-            const currentDate = new Date()
-            const startTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            
-            Api.get(`/v1/timeslots?clinic=${clinicId}&startTime=${startTime}`)
+            const clinicName = this.selectedClinic
+            const currentDate = new Date();
+            const startTime = currentDate.toISOString();
+
+            if (!clinicName) {
+            this.getTimeslots(startTime); 
+            return;
+        }
+            Api.get(`/v1/timeslots?clinic=${clinicName}&&startTime=${startTime}`)
             .then(response => {
-                this.timeslots = response.data;
+                this.timeslots = response.data.timeslots;
+                this.noTimeslotsMessage = this.timeslots.length === 0 ? "No timeslots available for selected clinic." : "";
             })
             .catch(error => {
                 console.error('Error fetching timeslots:', error);
@@ -309,12 +330,15 @@
         },
 
         filterByDate() {
-            const currentDate = new Date(this.selectedDate)
-            const startTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            console.log('Selected Date:', this.selectedDate);
+            const currentDate = new Date(this.selectedDate);
+            const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+            const startTime = `${formattedDate}T05:00:00`;
             
             Api.get(`/v1/timeslots?startTime=${startTime}`)
             .then(response => {
-                this.timeslots = response.data;
+                this.timeslots = response.data.timeslots;
+                this.noTimeslotsMessage = this.timeslots.length === 0 ? "No timeslots available for selected date." : "";
             })
             .catch(error => {
                 console.error('Error fetching timeslots:', error);
@@ -322,18 +346,24 @@
         },
 
         filterByDentist() {
-            const dentistId = this.selectedDentist
-            const currentDate = new Date()
-            const startTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            
-            Api.get(`/v1/timeslots?dentist=${dentistId}&startTime=${startTime}`)
+        const selectedDentistName = this.selectedDentist;
+        const currentDate = new Date();
+        const startTime = currentDate.toISOString();
+
+        if (!selectedDentistName) {
+            this.getTimeslots(startTime); 
+            return;
+        }
+
+        Api.get(`/v1/timeslots?dentist=${encodeURIComponent(selectedDentistName)}&startTime=${startTime}`)
             .then(response => {
-                this.timeslots = response.data;
+                this.timeslots = response.data.timeslots;
+                this.noTimeslotsMessage = this.timeslots.length === 0 ? "No timeslots available for selected dentist." : "";
             })
             .catch(error => {
                 console.error('Error fetching timeslots:', error);
-            })
-        },
+            });
+    },
 
         openNotifications() {
             this.showNotifications = true;
