@@ -38,16 +38,16 @@
           <h2>Book appointment</h2>
           <div class="columns" id="lessMargin">
               <div>
-                <input type="date" v-model="selectedDate" @input="filterByDate" id="dateFilter" class="filter">
+                <input type="date" v-model="selectedDate" @input="filterTimeslots" id="dateFilter" class="filter">
               </div>
               <div>
-                <select v-model="selectedClinic" @change="filterByClinic" id="clinicFilter" class="filter">
+                <select v-model="selectedClinic" @change="filterTimeslots" id="clinicFilter" class="filter">
                     <option value="">All Clinics</option>
                     <option v-for="clinic in clinics" :key="clinic.id" :value="clinic.name">{{ clinic.name }}</option>
                 </select>
               </div>
               <div>
-                <select v-model="selectedDentist" @change="filterByDentist" id="dentistFilter" class="filter">
+                <select v-model="selectedDentist" @change="filterTimeslots" id="dentistFilter" class="filter">
                     <option value="">All Dentists</option>
                     <option v-for="dentist in dentists" :key="dentist.id" :value="dentist.name">{{ dentist.name }}</option>
                 </select>
@@ -310,6 +310,31 @@
             })
         },
 
+        filterTimeslots() {
+    const currentDate = new Date(this.selectedDate);
+    const formattedDate = moment(currentDate).format('YYYY-MM-DD');
+    const startTime = `${formattedDate}T05:00:00`;
+
+    const params = {
+        startTime: startTime,
+        clinic: this.selectedClinic,
+        dentist: this.selectedDentist
+    };
+
+    // Remove empty parameters
+    Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
+
+    Api.get('/v1/timeslots', { params: params })
+        .then(response => {
+            this.timeslots = response.data.timeslots;
+            this.noTimeslotsMessage = this.timeslots.length === 0 ? "No timeslots available for selected filters." : "";
+        })
+        .catch(error => {
+            console.error('Error fetching timeslots:', error);
+        });
+},
+
+        
         filterByClinic() {
             const clinicName = this.selectedClinic
             const currentDate = new Date();
