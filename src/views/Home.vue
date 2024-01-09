@@ -83,14 +83,13 @@
                 > </l-tile-layer>
                 <l-control-scale position="topright" :imperial="true" :metric="true" ></l-control-scale>
                 <l-marker v-for="clinic in clinics" :key="clinic.id" :lat-lng="[clinic.latitude, clinic.longitude]">
-                <l-popup> 
-                    <p class="clinic">
-                    {{ clinic.name }}
-                    </p>
-                    <button class="clinic-btn" @click="goToClinicPage(clinic.id)">Clinic's Page</button>
-                </l-popup>
-               </l-marker>
-                </l-map>       
+                    <l-popup> 
+                        <p class="clinic">{{ clinic.name }}</p>
+                        <button @click="showTimeslots(`${clinic.name}`)" class="alert">Check for timeslots</button><br>
+                        <button class="clinic-btn" @click="goToClinicPage(clinic.id)">Clinic's Page</button>
+                    </l-popup>
+                </l-marker>
+            </l-map>       
             </div>
           </div>
       </div>
@@ -127,6 +126,9 @@
         dentists: [],
         showNotifications: false,
         zoom: 11.5,
+        hasFreeTimeslots: false,
+        clinicsTimeslots: [],
+        clinicsFreeTimeslots: {},
       }
     },
     mounted() {
@@ -248,7 +250,51 @@
                 .then(response => {
                     console.log(response.data.clinics)
                     this.clinics = response.data.clinics
+
+                //     this.clinics.forEach(clinic => {
+                //         Api.get('/v1/timeslots?clinic=' + clinic.name)
+                //         .then(response => {
+                //            let clinicsTimeslots = response.data.timeslots
+                //            console.log('free timeslots ' + clinic.name, clinicsTimeslots)
+
+                //            if(clinicsTimeslots.length > 0){
+                //             this.hasFreeTimeslots = true
+                //            }
+
+                //     })
+                //    });
+                    
                 })
+                .catch(error => {
+                    console.error(error.response.data)
+                })
+        },
+
+         showTimeslots(clinicName) {
+    // try {
+    //     const response = await Api.get('/v1/timeslots?clinic=' + clinicName);
+    //     console.log(response.data.timeslots)
+    //     const clinicsTimeslots = response.data.timeslots;
+
+    //     // Update the data property with information about free time slots for this clinic
+    //     this.$set(this.clinicsFreeTimeslots, clinicName, clinicsTimeslots.length > 0);
+    //     return clinicsTimeslots.length > 0;
+    // } catch (error) {
+    //     console.log(error);
+    //     return false;
+    // }
+
+            Api.get('/v1/timeslots?clinic=' + clinicName)
+                .then(response => {
+                    let clinicsTimeslots = response.data.timeslots
+                    console.log('free timeslots ' + clinicName, clinicsTimeslots)
+                    console.log(clinicsTimeslots.length)
+                    
+                    if(clinicsTimeslots.length > 0){
+                        alert("They have free timeslots, yayy! :)")
+                    } else {
+                    alert("Currently no free timeslots at this clinic :(")
+                }})
                 .catch(error => {
                     console.error(error.response.data)
                 })

@@ -204,6 +204,15 @@ iframe {
     margin-right: 2%;
 }
 
+.alert {
+    font-family: 'Maven Pro';
+    border: none;
+    padding: 0.4rem;
+    background-color: black;
+    color: white;
+    margin-bottom: 1rem;
+}
+
 @media only screen and (max-width: 600px) {
     iframe {
         width: 100%;
