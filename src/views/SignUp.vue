@@ -16,7 +16,7 @@
       <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
           <br />
         <br />
-        <a href="/login" class="signup-link">Login here</a>
+        <a href="/" class="signup-link">Login here</a>
         </div> 
         <div class="image-container">
       <img src="../assets/login-img.png" class="centered-image">

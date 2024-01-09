@@ -80,7 +80,9 @@
               </ul>
               <div v-if="noTimeslotsMessage" class="no-timeslots-message">{{ noTimeslotsMessage }}</div>
 
+              
           </div>
+          <a href="/dentists">See all dentists</a>
   
           <div class="columns">
               <div class="half-column">

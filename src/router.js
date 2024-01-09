@@ -8,12 +8,12 @@ import AllDentists from './views/AllDentists.vue';
 import Clinic from './views/Clinic.vue'
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home-page',
     component: Home,
   },
   {
-    path: '/login',
+    path: '/',
     name: 'Login-page',
     component: Login,
   },
