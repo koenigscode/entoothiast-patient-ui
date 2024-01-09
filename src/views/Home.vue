@@ -37,6 +37,8 @@
           <div class="appointment">
             <p><b>Start Time:</b> {{ formatDateTime(appointment.start_time) }}</p>
             <p><b>End Time:</b> {{ formatDateTime(appointment.end_time) }}</p>
+            <p><b>Dentist:</b> {{ appointment.dentist_name }}</p>
+            <p><b>Clinic:</b> {{ appointment.clinic_name }}</p>
             <p v-if="isUpcomingAppointment(appointment)">
                 <img src="../assets/cancel.png" class="book" @click="cancelAppointment(appointment.id)"> 
                 Cancel appointment
