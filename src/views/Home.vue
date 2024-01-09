@@ -14,7 +14,8 @@
                 <button @click="markNotificationsAsRead" class="close">Mark as read</button>
             </div>
 
-          <img src="../assets/notification.png" class="icon" @click="openNotifications">
+            <img :src="getNotificationIcon()" class="icon" @click="openNotifications">
+
           <router-link to="/settings"><img src="../assets/settings.png" class="icon"></router-link>
           <img src="../assets/logout.png" class="icon" @click="logout">
         </div>
@@ -123,6 +124,7 @@
         selectedTimespan: 'upcoming',
         filteredAppointments: [],
         noAppointmentsMessage: '',
+        hasUnreadNotifications: false,
       }
     },
     mounted() {
@@ -254,15 +256,19 @@ isUpcomingAppointment(appointment) {
     },
 
     fetchNotifications(userId) {
-        Api.get(`/v1/users/${userId}/notifications`)
-            .then(response => {
-                this.notifications = response.data.notifications;
-                console.log(response.data.notifications);
-            })
-            .catch(error => {
-                console.error(error.response.data);
-            });
-    },
+  Api.get(`/v1/users/${userId}/notifications`)
+    .then(response => {
+      this.notifications = response.data.notifications;
+      this.hasUnreadNotifications = this.notifications.some(notification => !notification.read);
+    })
+    .catch(error => {
+      console.error(error.response.data);
+    });
+},
+
+getNotificationIcon() {
+    return require(`@/assets/${this.hasUnreadNotifications ? 'new-notification.png' : 'notification.png'}`);
+},
 
     beforeDestroy() {
         clearInterval(this.notificationInterval);
