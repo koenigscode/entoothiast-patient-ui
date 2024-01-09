@@ -5,9 +5,12 @@
         <div class="iconbar">
             <div v-if="showNotifications" class="notification-modal">
                 <h2 style="color: black;">Notifications</h2>
-                <ul><li v-for="notification in notifications" :key="notification.id">
-                        <p>{{ notification.message }}</p><br>
-                  </li></ul>
+                <ul>
+    <li v-for="notification in notifications" :key="notification.id" :class="{ 'read-notification': notification.read }">
+        <p>{{ notification.message }}</p><br>
+    </li>
+</ul>
+
                 <button @click="markNotificationsAsRead" class="close">Mark as read</button>
             </div>
 
@@ -17,23 +20,35 @@
         </div>
           <h1>Welcome, {{ name }}</h1>
           <div class="columns">
-              <div class="half-column">
-                  <h2>Your next appointment</h2>
-                  <ul><li v-for="appointment in upcomingAppointments" :key="appointment.id">
-                    <div class="appointment">
-                          <p><b>{{ appointment.timeslot_id }}</b><br>{{ appointment.dentist_id }}</p>
-                          <p><img src="../assets/cancel.png" class="book" @click="cancelAppointment(appointment.timeslot_id)"> Cancel appointment</p>
-                      </div>
-                  </li></ul>
-              </div>
-              <div class="half-column">
-                <h2>Your past appointments</h2>
-                <ul><li v-for="appointment in pastAppointments" :key="appointment.id">
-                <div class="appointment">
-                    <p><b>{{ appointment.timeslot_id }}</b><br> {{ appointment.dentist_id }}</p>
-                </div></li></ul>
-              </div>
+  <div class="full-column">
+    <h2>Your Appointments</h2>
+    <div class="columns">
+      <div>
+      
+        <select v-model="selectedTimespan" @change="filterByTimespan" id="timespanFilter" class="timespanFilter">
+          <option value="upcoming">Upcoming Appointments</option>
+          <option value="past">Past Appointments</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="columns">
+      <ul id="appointments">
+        <li v-for="appointment in filteredAppointments" :key="appointment.id">
+          <div class="appointment">
+            <p><b>Start Time:</b> {{ formatDateTime(appointment.start_time) }}</p>
+            <p><b>End Time:</b> {{ formatDateTime(appointment.end_time) }}</p>
+            <p v-if="isUpcomingAppointment(appointment)">
+                <img src="../assets/cancel.png" class="book" @click="cancelAppointment(appointment.id)"> 
+                Cancel appointment
+            </p>
           </div>
+        </li>
+      </ul>
+      <div v-if="noAppointmentsMessage" class="no-timeslots-message">{{ noAppointmentsMessage }}</div>
+    </div>
+  </div>
+</div>
   
           <h2>Book appointment</h2>
           <div class="columns" id="lessMargin">
@@ -108,12 +123,16 @@
         appointmentsThisYear: 0,
         mostUsedDentist: '',
         noTimeslotsMessage: '',
+        selectedTimespan: 'upcoming',
+        filteredAppointments: [],
+        noAppointmentsMessage: '',
       }
     },
     mounted() {
         this.getUserData()
         this.getAllClinics()
         this.getAllDentists()
+        this.filterByTimespan();
         this.getTimeslots(this.startTime)
         this.getUserStatistics()
     },
@@ -130,8 +149,9 @@
                 const userData = response.data.message[0];
                 this.username = userData.username;
                 this.name = userData.name;
-                this.getUsersAppointments()
-                this.getUsersNotifications()
+                this.filterByTimespan();
+                this.getUsersNotifications();
+                this.getTimeslots(this.startTime);
             })
             .catch(error => {
                 console.error('Error fetching user data:', error)
@@ -144,41 +164,81 @@
             this.$router.push('/login')
         },
 
+
+  filterByTimespan() {
+      this.noAppointmentsMessage = ''; 
+      const userId = localStorage.getItem('userId');
+
+      if (!userId) {
+        console.error('User ID not found in local storage.');
+        return;
+      }
+      const timespan = this.selectedTimespan;
+
+      Api.get(`/v1/users/${userId}/appointments?timespan=${timespan}`)
+        .then(response => {
+          this.filteredAppointments = response.data.appointments.filter(appointment => !appointment.cancelled);
+        this.noAppointmentsMessage =
+        this.filteredAppointments.length === 0
+        ? `No upcoming appointments available.`
+        : '';
+})
+        .catch(error => {
+          console.error(error.response.data);
+        });
+    },
+
+    cancelAppointment(appointmentId) {
+   
+    const cancelData = {
+        cancelled: true
+    };
+
+    Api.patch(`/v1/appointments/${appointmentId}`, cancelData)
+        .then(response => {
+            console.log('Appointment canceled successfully:', response.data);
         
-        getUsersAppointments() {
-            const userId = localStorage.getItem('userId');
+            const index = this.filteredAppointments.findIndex(appointment => appointment.id === appointmentId);
+            if (index !== -1) {
+            this.filteredAppointments.splice(index, 1);
+        }
+        })
+        .catch(error => {
+            console.error('Error canceling appointment:', error.response.data);
+        });
+},
 
-            if (!userId) {
-            console.error('User ID not found in local storage.');
-            return;
-            }
+isUpcomingAppointment(appointment) {
+        const currentTime = new Date();
+        const appointmentStartTime = new Date(appointment.start_time);
+        return appointmentStartTime > currentTime;
+    },
 
-            Api.get(`/v1/users/${userId}/appointments`)
+    bookAppointment(timeslot) {
+        const userId = localStorage.getItem('userId');
+        console.log('Timeslot object:', timeslot);
+        var newAppointment = {
+            timeslot_id: timeslot.id,
+            patient_id: userId,
+            dentist_id: timeslot.dentist_id,
+            cancelled: false,
+            confirmed: true
+        }
+        console.log(newAppointment)
+        Api.post('/v1/appointments', newAppointment)
             .then(response => {
-                const allAppointments = response.data.message
-                
-                allAppointments.forEach(appointment => {
-                    const timeslotId = appointment.timeslot_id
+                console.log(response.data);
 
-                    Api.get(`/v1/timeslots/${timeslotId}`)
-                    .then(response => {
-                        const timeslotEndTime = new Date(response.data.end_time)
-                        
-                        if (timeslotEndTime > this.startTime) {
-                            this.upcomingAppointments.push(appointment)
-                        } else {
-                            this.pastAppointments.push(appointment)
-                        }
-                    })
-                    .catch(error => {
-                        console.error(error.response.data)
-                    })
-                })
+                const index = this.timeslots.findIndex(slot => slot.id === timeslot.id);
+                if (index !== -1) {
+                    this.timeslots.splice(index, 1);
+                }
+                this.filterByTimespan();
             })
             .catch(error => {
-                console.error(error.response.data);
+                console.error(error.response.data)
             })
-        },
+    },
 
         getUsersNotifications() {
         const userId = localStorage.getItem('userId');
@@ -212,21 +272,24 @@
     },
 
     markNotificationsAsRead() {
-        const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
 
-        if (!userId) {
-            console.error('User ID not found in local storage.');
-            return;
-        }
-        Api.patch(`/v1/users/${userId}/notifications`)
-            .then(response => {
-                console.log('Notifications marked as read:', response.data);
-                this.showNotifications = false;
-            })
-            .catch(error => {
-                console.error('Error marking notifications as read:', error.response.data);
-            });
-    },
+    if (!userId) {
+        console.error('User ID not found in local storage.');
+        return;
+    }
+
+    Api.patch(`/v1/users/${userId}/notifications`)
+        .then(response => {
+            console.log('Notifications marked as read:', response.data);
+            this.showNotifications = false;
+            this.notifications = [];
+        })
+        .catch(error => {
+            console.error('Error marking notifications as read:', error.response.data);
+        });
+},
+
 
         getTimeslots(startTime) {
             console.log('calling timeslots')
@@ -247,41 +310,6 @@
                 ...timeslot,
                 dentist: timeslot.dentist_name,
             }));
-            })
-            .catch(error => {
-                console.error(error.response.data)
-            })
-        },
-
-        bookAppointment(timeslot) {
-            const userId = localStorage.getItem('userId');
-            console.log('Timeslot object:', timeslot);
-            var newAppointment = {
-                timeslot_id: timeslot.id,
-                patient_id: userId,
-                dentist_id: timeslot.dentist_id,
-                cancelled: false,
-                confirmed: true
-            }
-            console.log(newAppointment)
-            Api.post('/v1/appointments', newAppointment)
-            .then(response => {
-                console.log(response.data)
-                newAppointment = response.data
-            })
-            .catch(error => {
-                console.error(error.response.data)
-            })
-        },
-
-        cancelAppointment(timeslot) {
-            const cancelledAppointment = {
-                timeslot_id: timeslot,
-                cancelled: true
-            }
-            Api.patch(`/v1/appointments/`, cancelledAppointment)
-            .then(response => {
-                console.log(response.data)
             })
             .catch(error => {
                 console.error(error.response.data)

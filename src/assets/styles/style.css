@@ -170,6 +170,17 @@ ul {
     font-weight: bold;
 }
 
+.timespanFilter {
+    background-color: #C2AFD9;
+    border-radius: 0 30px;
+    color: #FFFFFF;
+    padding: 1rem;
+    margin-right: 1rem;
+    font-family: 'Maven Pro';
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 input[type="date"] {
     border: none;
     color: #FFFFFF;
@@ -196,8 +207,12 @@ input[type="date"] {
     color: #000000;
     text-align: left;
     min-width: 30%;
+    max-height: 300px; 
+    overflow-y: auto;
 }
-
+.read-notification {
+    opacity: 0.5; 
+}
 .close {
     border: none;
     background-color: #000000;
