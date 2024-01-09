@@ -140,6 +140,7 @@ ul {
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
+    width: 100%;
   }
 
  #appointment li {
@@ -179,6 +180,7 @@ ul {
     font-family: 'Maven Pro';
     font-size: 1rem;
     font-weight: bold;
+    width: 35%;
 }
 
 input[type="date"] {

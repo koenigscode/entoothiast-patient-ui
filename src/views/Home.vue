@@ -19,21 +19,19 @@
           <img src="../assets/logout.png" class="icon" @click="logout">
         </div>
           <h1>Welcome, {{ name }}</h1>
-          <div class="columns">
-  <div class="full-column">
+          
     <h2>Your Appointments</h2>
-    <div class="columns">
-      <div>
+    <div class="columns" id="lessMargin">
       
         <select v-model="selectedTimespan" @change="filterByTimespan" id="timespanFilter" class="timespanFilter">
           <option value="upcoming">Upcoming Appointments</option>
           <option value="past">Past Appointments</option>
         </select>
       </div>
-    </div>
+
 
     <div class="columns">
-      <ul id="appointments">
+      <ul id="appointment">
         <li v-for="appointment in filteredAppointments" :key="appointment.id">
           <div class="appointment">
             <p><b>Start Time:</b> {{ formatDateTime(appointment.start_time) }}</p>
@@ -47,8 +45,7 @@
       </ul>
       <div v-if="noAppointmentsMessage" class="no-timeslots-message">{{ noAppointmentsMessage }}</div>
     </div>
-  </div>
-</div>
+
   
           <h2>Book appointment</h2>
           <div class="columns" id="lessMargin">
@@ -135,6 +132,9 @@
         this.filterByTimespan();
         this.getTimeslots(this.startTime)
         this.getUserStatistics()
+        setInterval(() => {
+    this.getTimeslots(this.startTime);
+                }, 3000);
     },
     methods: {
         getUserData() {
@@ -177,8 +177,7 @@
 
       Api.get(`/v1/users/${userId}/appointments?timespan=${timespan}`)
         .then(response => {
-          this.filteredAppointments = response.data.appointments.filter(appointment => !appointment.cancelled);
-        this.noAppointmentsMessage =
+          this.filteredAppointments = response.data.appointments;
         this.filteredAppointments.length === 0
         ? `No upcoming appointments available.`
         : '';
@@ -198,10 +197,7 @@
         .then(response => {
             console.log('Appointment canceled successfully:', response.data);
         
-            const index = this.filteredAppointments.findIndex(appointment => appointment.id === appointmentId);
-            if (index !== -1) {
-            this.filteredAppointments.splice(index, 1);
-        }
+           window.location.reload();
         })
         .catch(error => {
             console.error('Error canceling appointment:', error.response.data);
@@ -233,7 +229,8 @@ isUpcomingAppointment(appointment) {
                 if (index !== -1) {
                     this.timeslots.splice(index, 1);
                 }
-                this.filterByTimespan();
+                //this.filterByTimespan();
+                window.location.reload();
             })
             .catch(error => {
                 console.error(error.response.data)
@@ -253,7 +250,7 @@ isUpcomingAppointment(appointment) {
         // Set up interval to fetch notifications every 5 seconds
         this.notificationInterval = setInterval(() => {
             this.fetchNotifications(userId);
-        }, 5000);
+        },3000);
     },
 
     fetchNotifications(userId) {
@@ -291,30 +288,38 @@ isUpcomingAppointment(appointment) {
 },
 
 
-        getTimeslots(startTime) {
-            console.log('calling timeslots')
+getTimeslots(startTime) {
+    console.log('calling timeslots');
 
-            const params = { startTime: startTime };
+    const params = { startTime: startTime };
 
-            if (this.selectedClinic) {
-            params.clinic = this.selectedClinic;
-            }
+    if (this.selectedClinic) {
+      params.clinic = this.selectedClinic;
+    }
 
-            if (this.selectedDentist) {
-            params.dentist = this.selectedDentist;
-            }
-            Api.get('/v1/timeslots', { params: params})
-            .then(response => {
-                console.log(response.data.timeslots)
-                this.timeslots = response.data.timeslots.map(timeslot => ({
-                ...timeslot,
-                dentist: timeslot.dentist_name,
-            }));
-            })
-            .catch(error => {
-                console.error(error.response.data)
-            })
-        },
+    if (this.selectedDentist) {
+      params.dentist = this.selectedDentist;
+    }
+
+    Api.get('/v1/timeslots', { params: params })
+      .then(response => {
+        console.log(response.data.timeslots);
+        const newCounter = response.data.timeslots.length;
+        if (newCounter > this.timeslotCounter) {
+          this.timeslotCounter = newCounter;
+          window.location.reload();
+          //this.filterByTimespan();
+        }
+        
+        this.timeslots = response.data.timeslots.map(timeslot => ({
+          ...timeslot,
+          dentist: timeslot.dentist_name,
+        }));
+      })
+      .catch(error => {
+        console.error(error.response.data);
+      });
+  },
 
         getAllClinics() {
             Api.get('/v1/clinics')
