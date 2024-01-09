@@ -91,19 +91,42 @@
                   </ul>
               </div>
               <div class="half-column">
-                  <h2>Find your way</h2>
-                  <iframe class="border-radius" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37624.51290945841!2d11.951633712337204!3d57.70577925453717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x464f8e67966c073f%3A0x4019078290e7c40!2zR8O2dGVib3Jn!5e0!3m2!1sfi!2sse!4v1699993100652!5m2!1sfi!2sse" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-              </div>
+                 <l-map ref="map" v-model:zoom="zoom" :center="[57.706413, 11.966846]">
+                    <l-tile-layer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    layer-type="base"
+                    name="OpenStreetMap"
+                > </l-tile-layer>
+                <l-control-scale position="topright" :imperial="true" :metric="true" ></l-control-scale>
+                <l-marker v-for="clinic in clinics" :key="clinic.id" :lat-lng="[clinic.latitude, clinic.longitude]">
+                    <l-popup> 
+                        <p class="clinic">{{ clinic.name }}</p>
+                        <button @click="showTimeslots(`${clinic.name}`)" class="alert">Check for timeslots</button><br>
+                        <button class="clinic-btn" @click="goToClinicPage(clinic.id)">Clinic's Page</button>
+                    </l-popup>
+                </l-marker>
+            </l-map>       
+            </div>
           </div>
       </div>
       </body>
     </template>
     
 <script>
-    import {Api} from '../Api';
+    import "leaflet/dist/leaflet.css";
+    import { LMap, LTileLayer, LMarker, LControlScale, LPopup } from "@vue-leaflet/vue-leaflet";
+    import { Api } from "@/Api";
+
     import moment from 'moment';
     export default {
       name: "Home-page",
+      components: {
+        LMap,
+        LTileLayer,
+        LMarker,
+        LPopup,
+        LControlScale
+    },
       data() {
       return {
         username: '',
@@ -127,6 +150,10 @@
         filteredAppointments: [],
         noAppointmentsMessage: '',
         hasUnreadNotifications: false,
+        zoom: 11.5,
+        hasFreeTimeslots: false,
+        clinicsTimeslots: [],
+        clinicsFreeTimeslots: {},
       }
     },
     mounted() {
@@ -340,6 +367,36 @@ getTimeslots(startTime) {
                 })
         },
 
+         showTimeslots(clinicName) {
+    // try {
+    //     const response = await Api.get('/v1/timeslots?clinic=' + clinicName);
+    //     console.log(response.data.timeslots)
+    //     const clinicsTimeslots = response.data.timeslots;
+
+    //     // Update the data property with information about free time slots for this clinic
+    //     this.$set(this.clinicsFreeTimeslots, clinicName, clinicsTimeslots.length > 0);
+    //     return clinicsTimeslots.length > 0;
+    // } catch (error) {
+    //     console.log(error);
+    //     return false;
+    // }
+
+            Api.get('/v1/timeslots?clinic=' + clinicName)
+                .then(response => {
+                    let clinicsTimeslots = response.data.timeslots
+                    console.log('free timeslots ' + clinicName, clinicsTimeslots)
+                    console.log(clinicsTimeslots.length)
+                    
+                    if(clinicsTimeslots.length > 0){
+                        alert("They have free timeslots, yayy! :)")
+                    } else {
+                    alert("Currently no free timeslots at this clinic :(")
+                }})
+                .catch(error => {
+                    console.error(error.response.data)
+                })
+        },
+
         getAllDentists() {
             Api.get('/v1/dentists')
             .then(response => {
@@ -464,7 +521,11 @@ getTimeslots(startTime) {
 
   formatDateTime(dateTime) {
       return moment(dateTime).format('DD-MM-YYYY HH:mm');
-    },
+          },
+        
+        goToClinicPage(clinicId) {
+             this.$router.push('/clinics/' + clinicId)
+        }
     }
 }
 </script>
