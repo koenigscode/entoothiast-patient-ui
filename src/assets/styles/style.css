@@ -303,7 +303,9 @@ input[type="date"] {
     }
 
     .columns {
+        display: flex;
         flex-direction: column;
+        width: 100%;
     }
 
     .half-column {
@@ -334,7 +336,7 @@ input[type="date"] {
         margin-bottom: 2%;
     }
 
-    .appointment {
+    .appointments {
         width: 90%;
         margin-bottom: 5%;
     }

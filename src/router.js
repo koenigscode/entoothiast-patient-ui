@@ -7,12 +7,12 @@ import Login from './views/Login.vue';
 import AllDentists from './views/AllDentists.vue';
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home-page',
     component: Home,
   },
   {
-    path: '/login',
+    path: '/',
     name: 'Login-page',
     component: Login,
   },
