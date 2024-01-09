@@ -37,6 +37,12 @@ iframe {
     box-shadow: var(--secondary-drop-shadow);
 }
 
+ul {
+    list-style: none;
+    margin-block-start: 0;
+    padding-inline-start: 0;
+}
+
 .logo {
     max-width: 17%;
     margin-top: 5%;
@@ -266,6 +272,21 @@ input[type="date"] {
 .icon {
     width: 2rem;
     margin-left: 2rem;
+}
+
+.dentist-list {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.dentist-icon {
+    margin-right: 2rem;
+}
+
+.rating-container {
+    padding: 1rem 2.5rem;
 }
 
 .clinic {
