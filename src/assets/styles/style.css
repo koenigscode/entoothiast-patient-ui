@@ -119,9 +119,38 @@ iframe {
 .appointment {
     border: 1px solid #C2AFD9;
     border-radius: 0 30px;
-    width: 50%;
+    width: 80%;
     padding: 1rem;
     margin-right: 5%;
+    box-shadow: var(--secondary-drop-shadow);
+}
+
+ul {
+    list-style-type: none;
+}
+
+#appointment {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    width: 100%;
+  }
+
+ #appointment li {
+    flex: 0 0 33.3333%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    width: 100%;
+  }
+
+.timeslotBox {
+    border: 1px solid #C2AFD9;
+    border-radius: 0 30px;
+    width: 100%;
+    padding: 1rem;
+    margin-right: 5%;
+    margin-bottom: 5%;
     box-shadow: var(--secondary-drop-shadow);
 }
 
@@ -129,9 +158,28 @@ iframe {
     background-color: #C2AFD9;
     border-radius: 0 30px;
     color: #FFFFFF;
-    padding: 0.3rem 2rem;
-    width: 13rem;
-    margin-right: 2%;
+    padding: 1rem;
+    margin-right: 1rem;
+    font-family: 'Maven Pro';
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.timespanFilter {
+    background-color: #C2AFD9;
+    border-radius: 0 30px;
+    color: #FFFFFF;
+    padding: 1rem;
+    margin-right: 1rem;
+    font-family: 'Maven Pro';
+    font-size: 1rem;
+    font-weight: bold;
+    width: 35%;
+}
+
+input[type="date"] {
+    border: none;
+    color: #FFFFFF;
 }
 
 .input-field {
@@ -141,6 +189,38 @@ iframe {
     width: 70%;
     margin-bottom: 5%;
     margin-top: 5%;
+}
+
+.notification-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(194, 175, 217, 0.5);
+    padding: 2rem;
+    border-radius: 20px;
+    z-index: 1000;
+    color: #000000;
+    text-align: left;
+    min-width: 30%;
+    max-height: 300px; 
+    overflow-y: auto;
+}
+.read-notification {
+    opacity: 0.5; 
+}
+.close {
+    border: none;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Maven Pro';
+    box-shadow: none;
+    padding: 1rem;
+    margin-top: 3rem;
+}
+
+#lessMargin {
+    margin-top: 0;
 }
 
 .on {
@@ -202,6 +282,15 @@ iframe {
     padding: 0.4rem 1.6rem;
     font-size: 0.9rem;
     margin-right: 2%;
+}
+
+.alert {
+    font-family: 'Maven Pro';
+    border: none;
+    padding: 0.4rem;
+    background-color: black;
+    color: white;
+    margin-bottom: 1rem;
 }
 
 @media only screen and (max-width: 600px) {
